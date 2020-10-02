@@ -1,1 +1,4 @@
 ./ShoppingLister/node_modules
+*/__pychache__
+.idea/
+db.*

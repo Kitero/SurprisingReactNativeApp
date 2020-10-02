@@ -120,3 +120,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Rest framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'api.authenticator.CustomAuthenticator'
+    ]
+}
+
+# Cors header
+# CORS_ORIGIN_ALLOW_ALL = True
+#
+# from corsheaders.default import default_headers
+#
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'token'
+# ]

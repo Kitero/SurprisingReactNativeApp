@@ -12,11 +12,16 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+    def create(self, validated_data):
+        if 'token' not in validated_data:
+            validated_data['token'] = tools.get_new_token()
+        return super().create(validated_data)
+
 
 class ShoppingItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ShoppingItem
-        fields = ('id', 'name', )
+        fields = ('id', 'name')
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
@@ -25,7 +30,7 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         fields = ('id', 'created_by', 'name')
 
 
-class ShoppingListItem(serializers.ModelSerializer):
+class ShoppingListItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ShoppingListItem
         fields = ('id', 'shopping_list', 'item', 'checked')
