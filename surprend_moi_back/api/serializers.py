@@ -1,0 +1,31 @@
+from rest_framework import serializers
+import api.models as models
+import api.tools as tools
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ('id', 'username', 'password', 'token', 'profile_picture')
+        extra_kwargs = {
+            'token': {'default': tools.get_new_token},
+            'password': {'write_only': True}
+        }
+
+
+class ShoppingItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ShoppingItem
+        fields = ('id', 'name', )
+
+
+class ShoppingListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ShoppingList
+        fields = ('id', 'created_by', 'name')
+
+
+class ShoppingListItem(serializers.ModelSerializer):
+    class Meta:
+        model = models.ShoppingListItem
+        fields = ('id', 'shopping_list', 'item', 'checked')
