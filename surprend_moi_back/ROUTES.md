@@ -1,5 +1,5 @@
 # Url
-https://url.com:5555
+http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555
 # Routes
 ## POST sign-up/
 Create new account.
