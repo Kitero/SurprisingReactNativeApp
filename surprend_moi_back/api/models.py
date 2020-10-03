@@ -9,7 +9,7 @@ class User(models.Model):
 
 
 class ShoppingItem(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
 
 
 class ShoppingList(models.Model):
