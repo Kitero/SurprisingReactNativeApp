@@ -3,6 +3,7 @@ import {
   ScrollView, View, Text,
 } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 
@@ -61,3 +62,11 @@ export default function listScreen({ navigation }) {
     </View>
   );
 }
+
+listScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    setOptions: PropTypes.func.isRequired,
+  }).isRequired,
+};

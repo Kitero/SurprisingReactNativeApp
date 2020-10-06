@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { boxContainer } from '../Style/BoxContainerStyle';
-import { MyTextInput } from '../components/textinput';
+import PropTypes from 'prop-types';
+import boxContainer from '../Style/BoxContainerStyle';
+import MyTextInput from '../components/textinput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 
@@ -15,17 +16,17 @@ export default function registerScreen({ navigation }) {
       <Text style={{ fontSize: 20 }}>Create your account</Text>
       <MyTextInput
         placeholder="Username"
-        selectionColor="#428AF8"
+        textContentType="username"
       />
       <MyTextInput
         placeholder="Password"
-        selectionColor="#428AF8"
         secureTextEntry
+        textContentType="newPassword"
       />
       <MyTextInput
         placeholder="Password confirmation"
-        selectionColor="#428AF8"
         secureTextEntry
+        textContentType="password"
       />
       <View style={{
         marginTop: 12,
@@ -44,3 +45,9 @@ export default function registerScreen({ navigation }) {
     </View>
   );
 }
+
+registerScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

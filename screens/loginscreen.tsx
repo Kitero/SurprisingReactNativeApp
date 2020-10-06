@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { boxContainer } from '../Style/BoxContainerStyle';
-import { MyTextInput } from '../components/textinput';
+import PropTypes from 'prop-types';
+import boxContainer from '../Style/BoxContainerStyle';
+import MyTextInput from '../components/textinput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 
@@ -43,3 +44,9 @@ export default function loginScreen({ navigation }) {
     </View>
   );
 }
+
+loginScreen.propTypes = {
+  navigation: PropTypes.shape({
+    reset: PropTypes.func.isRequired,
+  }).isRequired,
+};

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { boxContainer } from '../Style/BoxContainerStyle';
+import PropTypes from 'prop-types';
+import boxContainer from '../Style/BoxContainerStyle';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 
@@ -47,3 +48,9 @@ export default function disconnectScreen({ navigation }) {
     </View>
   );
 }
+
+disconnectScreen.propTypes = {
+  navigation: PropTypes.shape({
+    reset: PropTypes.func.isRequired,
+  }).isRequired,
+};

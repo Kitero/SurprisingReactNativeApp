@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const boxContainer = StyleSheet.create({
+export default StyleSheet.create({
   boxSimple: {
     backgroundColor: '#fff',
     borderRadius: 5,
@@ -12,7 +12,3 @@ const boxContainer = StyleSheet.create({
     marginTop: 100,
   },
 });
-
-export {
-  boxContainer,
-};

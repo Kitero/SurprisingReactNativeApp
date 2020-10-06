@@ -4,23 +4,35 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import PropTypes from 'prop-types';
+import { ButtonStyle } from '../Style/StyleSheet';
 
-interface State {
-  isFocused: boolean;
-}
-
-export default function MyButton(props) {
-  const { ...otherProps } = props;
+export default function MyButton({
+  onPress, styleButton, styleText, title,
+}) {
   return (
     <TouchableOpacity
-      onPress={props.onPress}
-      {...otherProps}
+      onPress={onPress}
     >
-      <View style={props.styleButton}>
-        <Text style={props.styleText}>
-          {props.title}
+      <View style={styleButton}>
+        <Text style={styleText}>
+          {title}
         </Text>
       </View>
     </TouchableOpacity>
   );
 }
+
+MyButton.propTypes = {
+  styleButton: PropTypes.element,
+  styleText: PropTypes.element,
+  onPress: PropTypes.func,
+  title: PropTypes.string,
+};
+
+MyButton.defaultProps = {
+  title: 'Button',
+  styleButton: ButtonStyle.button,
+  styleText: ButtonStyle.text,
+  onPress: () => {},
+};
