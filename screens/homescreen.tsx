@@ -3,39 +3,39 @@ import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
+import { registerRoute, loginRoute } from '../routes';
 
 export default function homeScreen({ navigation }) {
   return (
     <>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 40, margin: 'auto', paddingTop: 50 }}>
+        <Text style={{ fontSize: 40, margin: 'auto', paddingTop: 50, textAlign: 'center' }}>
           Create your shopping list
         </Text>
         <Text style={{ fontSize: 40, margin: 'auto' }}>
           But first, login !
         </Text>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row', margin: 'auto' }}>
+      <View style={{ flex: 1, flexDirection: 'column', margin: 'auto' }}>
         <View style={{
           margin: 50,
         }}
         >
           <MyButton
             title="Register"
-            onPress={() => navigation.navigate('Register')}
-            color="#00b70e"
+            onPress={() => navigation.navigate(registerRoute)}
             styleButton={ButtonStyle.bigbutton}
             styleText={ButtonStyle.bigtext}
           />
         </View>
         <View style={{
-          margin: 50,
+          marginRight: 50,
+          marginLeft: 50,
         }}
         >
           <MyButton
             title="Login"
-            onPress={() => navigation.navigate('Login')}
-            color="#00b70e"
+            onPress={() => navigation.navigate(loginRoute)}
             styleButton={ButtonStyle.bigbutton}
             styleText={ButtonStyle.bigtext}
           />

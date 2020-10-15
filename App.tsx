@@ -1,12 +1,14 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import homeScreen from './screens/homescreen';
-import loginScreen from './screens/loginscreen';
-import listScreen from './screens/listscreen';
-import registerScreen from './screens/registerscreen';
-import disconnectScreen from './screens/disconnectscreen';
+import homeScreen from './screens/homeScreen';
+import loginScreen from './screens/loginScreen';
+import listScreen from './screens/listScreen';
+import listItemsScreen from './screens/listItemsScreen';
+import registerScreen from './screens/registerScreen';
+import disconnectScreen from './screens/disconnectScreen';
 import useColorScheme from './hooks/useColorScheme';
+import * as routes from './routes';
 
 const Stack = createStackNavigator();
 
@@ -15,11 +17,12 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator colorScheme={colorScheme} initialRouteName="HomePage">
-        <Stack.Screen name="HomePage" component={homeScreen} options={{ title: 'Shopping list' }} />
-        <Stack.Screen name="Login" component={loginScreen} />
-        <Stack.Screen name="List" component={listScreen} />
-        <Stack.Screen name="Register" component={registerScreen} />
-        <Stack.Screen name="Disconnect" component={disconnectScreen} />
+        <Stack.Screen name={routes.homeRoute} component={homeScreen} options={{ title: 'Shopping list' }} />
+        <Stack.Screen name={routes.loginRoute} component={loginScreen} />
+        <Stack.Screen name={routes.listsRoute} component={listScreen} />
+        <Stack.Screen name={routes.listItemsRoute} component={listItemsScreen} />
+        <Stack.Screen name={routes.registerRoute} component={registerScreen} />
+        <Stack.Screen name={routes.disconnectRoute} component={disconnectScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

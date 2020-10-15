@@ -12,8 +12,7 @@ export default function MyButton({
 }) {
   return (
     <TouchableOpacity
-      onPress={onPress}
-    >
+      onPress={onPress}>
       <View style={styleButton}>
         <Text style={styleText}>
           {title}
@@ -24,8 +23,26 @@ export default function MyButton({
 }
 
 MyButton.propTypes = {
-  styleButton: PropTypes.element,
-  styleText: PropTypes.element,
+  styleButton: PropTypes.shape({
+    paddingTop: PropTypes.number,
+    paddingBottom: PropTypes.number,
+    paddingLeft: PropTypes.number,
+    paddingRight: PropTypes.number,
+    marginTop: PropTypes.number,
+    marginBottom: PropTypes.number,
+    marginLeft: PropTypes.number,
+    marginRight: PropTypes.number,
+    backgroundColor: PropTypes.string,
+    borderRadius: PropTypes.number,
+    borderColor: PropTypes.string,
+    height: PropTypes.number,
+    width: PropTypes.number,
+  }),
+  styleText: PropTypes.shape({
+    color: PropTypes.string,
+    textAlign: PropTypes.string,
+    fontSize: PropTypes.number,
+  }),
   onPress: PropTypes.func,
   title: PropTypes.string,
 };

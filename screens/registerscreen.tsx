@@ -5,6 +5,7 @@ import boxContainer from '../Style/BoxContainerStyle';
 import MyTextInput from '../components/textinput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
+import { loginRoute } from '../routes';
 
 function createAccount() {
   console.log('CreateAccount');
@@ -17,7 +18,7 @@ export default function registerScreen({ navigation }) {
       <MyTextInput
         placeholder="Username"
         textContentType="username"
-      />
+        />
       <MyTextInput
         placeholder="Password"
         secureTextEntry
@@ -35,7 +36,7 @@ export default function registerScreen({ navigation }) {
         <MyButton
           onPress={() => {
             createAccount();
-            navigation.navigate('Login');
+            navigation.navigate(loginRoute);
           }}
           title="Create your account"
           styleButton={ButtonStyle.button}

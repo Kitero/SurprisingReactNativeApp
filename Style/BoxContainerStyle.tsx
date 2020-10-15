@@ -9,6 +9,6 @@ export default StyleSheet.create({
     padding: 20,
     justifyContent: 'space-around',
     margin: 'auto',
-    marginTop: 100,
+    marginTop: 10,
   },
 });

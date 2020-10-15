@@ -1,24 +1,83 @@
 import * as React from 'react';
 import {
-  ScrollView, View, Text,
+  View, FlatList, Modal,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
+import { listStyle } from '../Style/listStyle';
+import { homeRoute, disconnectRoute, listItemsRoute } from '../routes';
 
 function disconnect() {
 
 }
 
 export default function listScreen({ navigation }) {
-  const data = {
-    choucroutte: 1,
-    poires: 4,
-    steak: 3,
-    sel: 1,
-    pommes: 5,
-  };
+  // example datalist, replace it with server data
+  const dataLists = [
+    {
+      name: 'course 1',
+      id: '1',
+    },
+    {
+      name: 'course 2',
+      id: '2',
+    },
+    {
+      name: 'course 3',
+      id: '3',
+    },
+    {
+      name: 'course 4',
+      id: '4',
+    },
+    {
+      name: 'course 5',
+      id: '5',
+    },
+    {
+      name: 'course 6',
+      id: '6',
+    },
+    {
+      name: 'course 7',
+      id: '7',
+    },
+    {
+      name: 'course 8',
+      id: '8',
+    },
+    {
+      name: 'course 9',
+      id: '9',
+    },
+    {
+      name: 'course 10',
+      id: '10',
+    },
+    {
+      name: 'course 11',
+      id: '11',
+    },
+    {
+      name: 'course 12',
+      id: '12',
+    },
+    {
+      name: 'course 13',
+      id: '13',
+    },
+    {
+      name: 'course 14',
+      id: '14',
+    },
+    {
+      name: 'course 15',
+      id: '15',
+    },
+  ];
+
+  // Set "Create new list" and "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -33,7 +92,7 @@ export default function listScreen({ navigation }) {
             title="Create a new list"
             onPress={() => navigation.reset({
               index: 0,
-              routes: [{ name: 'HomePage' }],
+              routes: [{ name: homeRoute }],
             })}
             styleButton={ButtonStyle.buttonTopBar}
             styleText={ButtonStyle.text}
@@ -42,7 +101,7 @@ export default function listScreen({ navigation }) {
             title="Disconnect"
             onPress={() => {
               disconnect();
-              navigation.navigate('Disconnect');
+              navigation.navigate(disconnectRoute);
             }}
             styleButton={ButtonStyle.buttonDisconnect}
             styleText={ButtonStyle.text}
@@ -51,14 +110,31 @@ export default function listScreen({ navigation }) {
       ),
     });
   }, [navigation]);
+
+  function loadListDetail(name) {
+    navigation.navigate(listItemsRoute, {
+      name,
+    });
+  }
+
+  const renderItemList = ({ item }) => (
+    <>
+      <MyButton
+        title={item.name}
+        styleButton={listStyle.elementStyle}
+        styleText={listStyle.nameStyle}
+        onPress={() => loadListDetail(item.name)}
+      />
+    </>
+  );
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>List Screen</Text>
-      <ScrollView>
-        <Text>
-          Insert List here
-        </Text>
-      </ScrollView>
+    <View style={listStyle.listContainer}>
+      <FlatList
+        data={dataLists}
+        renderItem={renderItemList}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import boxContainer from '../Style/BoxContainerStyle';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
+import { homeRoute, listsRoute } from '../routes';
 
 function disconnect() {
   console.log('disconnect');
@@ -21,12 +22,11 @@ export default function disconnectScreen({ navigation }) {
       >
         <MyButton
           title="Yes"
-          color="#00b70e"
           onPress={() => {
             disconnect();
             navigation.reset({
               index: 0,
-              routes: [{ name: 'HomePage' }],
+              routes: [{ name: homeRoute }],
             });
           }}
           styleButton={ButtonStyle.buttonConfirmation}
@@ -34,11 +34,10 @@ export default function disconnectScreen({ navigation }) {
         />
         <MyButton
           title="No"
-          color="#00b70e"
           onPress={() => {
             navigation.reset({
               index: 0,
-              routes: [{ name: 'List' }],
+              routes: [{ name: listsRoute }],
             });
           }}
           styleButton={ButtonStyle.buttonConfirmation}

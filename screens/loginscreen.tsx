@@ -5,6 +5,7 @@ import boxContainer from '../Style/BoxContainerStyle';
 import MyTextInput from '../components/textinput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
+import { listsRoute } from '../routes';
 
 function loginAccount() {
   console.log('LoginAccount');
@@ -34,7 +35,7 @@ export default function loginScreen({ navigation }) {
             loginAccount();
             navigation.reset({
               index: 0,
-              routes: [{ name: 'List' }],
+              routes: [{ name: listsRoute }],
             });
           }}
           styleButton={ButtonStyle.button}
