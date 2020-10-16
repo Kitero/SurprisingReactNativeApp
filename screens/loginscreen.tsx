@@ -12,17 +12,32 @@ function loginAccount() {
 }
 
 export default function loginScreen({ navigation }) {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  function handleUsernameChange(text) {
+    setUsername(text);
+  }
+
+  function handlePasswordChange(text) {
+    setPassword(text);
+  }
+
   return (
     <View style={boxContainer.boxSimple}>
       <Text style={{ fontSize: 20 }}>Connect to your account</Text>
       <MyTextInput
         placeholder="Username"
         selectionColor="#428AF8"
+        value={username}
+        onChangeText={handleUsernameChange}
       />
       <MyTextInput
         placeholder="Password"
         selectionColor="#428AF8"
         secureTextEntry
+        value={password}
+        onChangeText={handlePasswordChange}
       />
       <View style={{
         marginTop: 12,

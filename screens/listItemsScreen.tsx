@@ -32,7 +32,7 @@ export default function listItemsScreen({ route, navigation }) {
     setDisconnectModalVisible(false)
     //add disconnect feature
   }
-  
+
   const deleteList = () => {
     setDeleteModalVisible(true);
     //add request to delete the list
@@ -40,7 +40,7 @@ export default function listItemsScreen({ route, navigation }) {
 
   // Use name to request data to the server
   console.log(name)
-  var data = [
+  var base_data = [
     {
       name: 'choucroutte',
       quantity: 1,
@@ -82,6 +82,7 @@ export default function listItemsScreen({ route, navigation }) {
       id: '8',
     },
   ];
+  const [data, setData] = React.useState(base_data);
 
   // Set "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
@@ -116,7 +117,6 @@ export default function listItemsScreen({ route, navigation }) {
   }
 
   const renderItemList = ({ item, index }) => {
-    var nameItem = '' + item.name;
     return (
       <View style={itemsStyle.itemsContainer}>
         <View style={itemsStyle.item}>
@@ -128,15 +128,15 @@ export default function listItemsScreen({ route, navigation }) {
             </TextInput>
           </View>
           <ScrollView
-          horizontal={true}>
+            horizontal={true}>
             <TextInput
               style={itemsStyle.itemText}
-              value={testname} //This name stay the same value and erase the new one
+              value={item.name} //This name stay the same value and erase the new one
               onChangeText={(value) => {
-                testname = value;
-                console.log(value)
-                console.log(testname)
-                console.log('Suppose to call a callback here and update the new value')
+                console.log(data[index]);
+                data[index].name = value;
+                console.log(data[index]);
+                setData(data.slice());
               }}>
             </TextInput>
           </ScrollView>
@@ -147,117 +147,117 @@ export default function listItemsScreen({ route, navigation }) {
 
   return (
     <View>
-        <FlatList
-          data={data}
-          renderItem={renderItemList}
-          keyExtractor={(item) => item.id}
-          ListHeaderComponent={
-            <>
-              <MyButton
+      <FlatList
+        data={data}
+        renderItem={renderItemList}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            <MyButton
               title="Delete list"
               onPress={setDeleteModalVisible}
               styleButton={ButtonStyle.buttonDelete}
               styleText={ButtonStyle.text}
-              />
+            />
+            <MyButton
+              title="Create a new item"
+              onPress={() => navigation.reset({
+                index: 0,
+                routes: [{ name: homeRoute }],
+              })}
+              styleButton={ButtonStyle.buttonTopBar}
+              styleText={ButtonStyle.text}
+            />
+          </>
+        }
+        ListFooterComponent={
+          <View style={{ height: 280 }} />
+        }
+      />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={disconnectModalVisible}
+        onRequestClose={() => {
+          console.log("Modal has been closed.");
+        }}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.basicModal}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setDisconnectModalVisible(false);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Disconnect?
+              </Text>
+            <View style={modalStyle.modalContainer}>
               <MyButton
-                title="Create a new item"
-                onPress={() => navigation.reset({
-                  index: 0,
-                  routes: [{ name: homeRoute }],
-                })}
-                styleButton={ButtonStyle.buttonTopBar}
+                title="Yes"
+                onPress={() => {
+                  disconnect();
+                }}
+                styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}
               />
-            </>
-          }
-          ListFooterComponent={
-            <View style={{height:280}}/>
-          }
-        />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={disconnectModalVisible}
-          onRequestClose={() => {
-            console.log("Modal has been closed.");
-          }}
-        >
-          <View style={modalStyle.centerModal}>
-            <View style={modalStyle.basicModal}>
               <MyButton
-                  title="X"
-                  onPress={() => {
-                    setDisconnectModalVisible(false);
-                  }}
-                  styleButton={ButtonStyle.buttonClose}
-                  styleText={ButtonStyle.text}
-                />
-              <Text style={textStyle.text}>
-                Disconnect?
-              </Text>
-              <View style={modalStyle.modalContainer}>
-                <MyButton
-                    title="Yes"
-                    onPress={() => {
-                      disconnect();
-                    }}
-                    styleButton={modalStyle.modalButton}
-                    styleText={ButtonStyle.text}
-                  />
-                <MyButton
-                    title="No"
-                    onPress={() => {
-                      setDisconnectModalVisible(false);
-                    }}
-                    styleButton={modalStyle.modalButton}
-                    styleText={ButtonStyle.text}
-                  />
-              </View>
+                title="No"
+                onPress={() => {
+                  setDisconnectModalVisible(false);
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
             </View>
           </View>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={disconnectModalVisible}
-          onRequestClose={() => {
-            console.log("Modal has been closed.");
-          }}
-        >
-          <View style={modalStyle.centerModal}>
-            <View style={modalStyle.basicModal}>
-              <MyButton
-                  title="X"
-                  onPress={() => {
-                    setDisconnectModalVisible(false);
-                  }}
-                  styleButton={ButtonStyle.buttonClose}
-                  styleText={ButtonStyle.text}
-                />
-              <Text style={textStyle.text}>
-                Delete this list?
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={disconnectModalVisible}
+        onRequestClose={() => {
+          console.log("Modal has been closed.");
+        }}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.basicModal}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setDisconnectModalVisible(false);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Delete this list?
               </Text>
-              <View style={modalStyle.modalContainer}>
-                <MyButton
-                    title="Yes"
-                    onPress={() => {
-                      deleteList();
-                    }}
-                    styleButton={modalStyle.modalButton}
-                    styleText={ButtonStyle.text}
-                  />
-                <MyButton
-                    title="No"
-                    onPress={() => {
-                      setDeleteModalVisible(false);
-                    }}
-                    styleButton={modalStyle.modalButton}
-                    styleText={ButtonStyle.text}
-                  />
-              </View>
+            <View style={modalStyle.modalContainer}>
+              <MyButton
+                title="Yes"
+                onPress={() => {
+                  deleteList();
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
+              <MyButton
+                title="No"
+                onPress={() => {
+                  setDeleteModalVisible(false);
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
     </View>
   );
 }
