@@ -12,22 +12,32 @@ function createAccount() {
 }
 
 export default function registerScreen({ navigation }) {
+  const [username, setUsername] = React.useState('');
+  const [password1, setPassword1] = React.useState('');
+  const [password2, setPassword2] = React.useState('');
+
   return (
     <View style={boxContainer.boxSimple}>
       <Text style={{ fontSize: 20 }}>Create your account</Text>
       <MyTextInput
         placeholder="Username"
         textContentType="username"
-        />
+        value={username}
+        onChangeText={(text) => { setUsername(text); }}
+      />
       <MyTextInput
         placeholder="Password"
         secureTextEntry
         textContentType="newPassword"
+        value={password1}
+        onChangeText={(text) => { setPassword1(text); }}
       />
       <MyTextInput
         placeholder="Password confirmation"
         secureTextEntry
         textContentType="password"
+        value={password2}
+        onChangeText={(text) => { setPassword2(text); }}
       />
       <View style={{
         marginTop: 12,
