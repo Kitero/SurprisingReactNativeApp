@@ -31,12 +31,11 @@ const ButtonStyle = StyleSheet.create({
     height: 40,
   },
   buttonTopBar: {
-    paddingTop: 8,
-    paddingLeft: 7,
-    paddingRight: 7,
-    marginLeft: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
+    margin: 5,
     marginRight: 10,
-    marginTop: 10,
     backgroundColor: '#00b70e',
     borderRadius: 5,
     borderColor: '#00b70e',
@@ -54,8 +53,8 @@ const ButtonStyle = StyleSheet.create({
   },
   buttonDelete: {
     paddingTop: 8,
-    paddingLeft: 7,
-    paddingRight: 7,
+    paddingLeft: 8,
+    paddingRight: 8,
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
@@ -64,12 +63,24 @@ const ButtonStyle = StyleSheet.create({
     borderColor: '#ff7c00',
     height: 40,
   },
+  buttonNewItem: {
+    paddingTop: 8,
+    paddingRight: 8,
+    paddingLeft: 8,
+    margin: 7,
+    marginRight: 10,
+    marginLeft: 10,
+    backgroundColor: '#00b70e',
+    borderRadius: 5,
+    borderColor: '#00b70e',
+    height: 40,
+  },
   bigbutton: {
     paddingTop: 20,
     paddingLeft: 40,
     paddingRight: 40,
     backgroundColor: '#00b70e',
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: '#00b70e',
     height: 80,
   },
@@ -85,7 +96,7 @@ const ButtonStyle = StyleSheet.create({
   },
   buttonClose: {
     padding: 4,
-    backgroundColor: '#b70000',
+    backgroundColor: '#cbcbcb',
     borderRadius: 5,
     borderColor: '#b70000',
     height: 30,
@@ -96,9 +107,23 @@ const ButtonStyle = StyleSheet.create({
 
 const modalStyle = StyleSheet.create({
   basicModal: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     width: 300,
     height: 200,
+    alignItems: 'flex-end',
+    borderRadius: 10,
+  },
+  basicModalNewList: {
+    backgroundColor: '#fff',
+    width: 300,
+    height: 230,
+    alignItems: 'flex-end',
+    borderRadius: 10,
+  },
+  newItemModal: {
+    backgroundColor: '#fff',
+    width: 300,
+    height: 270,
     alignItems: 'flex-end',
     borderRadius: 10,
   },
@@ -111,6 +136,11 @@ const modalStyle = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
   },
+  modalContainerColumn: {
+    flexDirection: 'column',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
   modalButton: {
     paddingTop: 8,
     paddingLeft: 30,
@@ -121,7 +151,23 @@ const modalStyle = StyleSheet.create({
     height: 40,
     margin: 20,
     marginTop: 35,
-  }
+  },
+  modalNewItemButton: {
+    paddingTop: 8,
+    paddingLeft: 30,
+    paddingRight: 30,
+    backgroundColor: '#00b70e',
+    borderRadius: 5,
+    borderColor: '#00b70e',
+    height: 40,
+    margin: 20,
+  },
+  doubleContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    padding: 15,
+    paddingTop: 0,
+  },
 });
 
 const Default = StyleSheet.create({
@@ -140,7 +186,15 @@ const textStyle = StyleSheet.create({
     fontSize: 22,
     alignSelf: 'center',
   },
-})
+  textInput: {
+    color: '#000',
+    textAlign: 'left',
+    fontSize: 22,
+    paddingTop: 15,
+    paddingRight: 10,
+    paddingBottom: 5,
+  },
+});
 
 const lightTheme = {
   body: '#E2E2E2',

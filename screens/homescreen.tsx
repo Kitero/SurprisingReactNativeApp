@@ -9,7 +9,10 @@ export default function homeScreen({ navigation }) {
   return (
     <>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 40, margin: 'auto', paddingTop: 50, textAlign: 'center' }}>
+        <Text style={{
+          fontSize: 40, margin: 'auto', paddingTop: 50, textAlign: 'center',
+        }}
+        >
           Create your shopping list
         </Text>
         <Text style={{ fontSize: 40, margin: 'auto' }}>

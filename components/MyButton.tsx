@@ -12,7 +12,8 @@ export default function MyButton({
 }) {
   return (
     <TouchableOpacity
-      onPress={onPress}>
+      onPress={onPress}
+    >
       <View style={styleButton}>
         <Text style={styleText}>
           {title}

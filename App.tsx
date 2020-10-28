@@ -1,12 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import homeScreen from './screens/homescreen';
-import loginScreen from './screens/loginscreen';
-import listScreen from './screens/listscreen';
+import homeScreen from './screens/homeScreen';
+import loginScreen from './screens/loginScreen';
+import listScreen from './screens/listScreen';
 import listItemsScreen from './screens/listItemsScreen';
-import registerScreen from './screens/registerscreen';
-import disconnectScreen from './screens/disconnectscreen';
+import registerScreen from './screens/registerScreen';
 import useColorScheme from './hooks/useColorScheme';
 import * as routes from './routes';
 
@@ -22,7 +21,6 @@ export default function App() {
         <Stack.Screen name={routes.listsRoute} component={listScreen} />
         <Stack.Screen name={routes.listItemsRoute} component={listItemsScreen} />
         <Stack.Screen name={routes.registerRoute} component={registerScreen} />
-        <Stack.Screen name={routes.disconnectRoute} component={disconnectScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

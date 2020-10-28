@@ -1,20 +1,19 @@
 import * as React from 'react';
 import {
-  View, FlatList, Modal,
+  View, FlatList, Modal, Text,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
-import { ButtonStyle } from '../Style/StyleSheet';
+import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
-import { homeRoute, disconnectRoute, listItemsRoute } from '../routes';
-
-function disconnect() {
-
-}
+import { homeRoute, listItemsRoute } from '../routes';
+import MyDropDown from '../components/MyDropDown';
+import { dropDownStyle } from '../Style/dropdownStyle';
+import MyTextInput from '../components/MyTextInput';
 
 export default function listScreen({ navigation }) {
   // example datalist, replace it with server data
-  const dataLists = [
+  const baseData = [
     {
       name: 'course 1',
       id: '1',
@@ -77,6 +76,60 @@ export default function listScreen({ navigation }) {
     },
   ];
 
+  const [dataLists, setDataLists] = React.useState(baseData);
+  const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
+  const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
+  const [newItemName, setNewItemName] = React.useState('');
+
+  const disconnect = () => {
+    setDisconnectModalVisible(!disconnectModalVisible);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: homeRoute }],
+    });
+  }
+
+  const setNewID = () => {
+    if (dataLists.length == 0) {
+      return '0';
+    }
+    return ('' + (parseInt(dataLists[dataLists.length - 1].id, 10) + 1));
+  }
+
+  const saveNewData = () => {
+    console.log('Save new data');
+  }
+
+  const setPP = () => {
+    console.log('set PP');
+  }
+
+  const createNewList = () => {
+    console.log("create new list");
+  }
+
+  const triggerModalNewList = () => {
+    setNewItemModalVisible(!newItemModalVisible);
+  }
+
+  const dropdownData = [
+    {
+      title: 'Create new list',
+      callBack: triggerModalNewList,
+      id: '1',
+    },
+    {
+      title: 'Set profil picture',
+      callBack: setPP,
+      id: '2',
+    },
+    {
+      title: 'Disconnect',
+      callBack: disconnect,
+      id: '3',
+    },
+  ];
+
   // Set "Create new list" and "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -88,23 +141,11 @@ export default function listScreen({ navigation }) {
             flexDirection: 'row',
           }}
         >
-          <MyButton
-            title="Create a new list"
-            onPress={() => navigation.reset({
-              index: 0,
-              routes: [{ name: homeRoute }],
-            })}
-            styleButton={ButtonStyle.buttonTopBar}
-            styleText={ButtonStyle.text}
-          />
-          <MyButton
-            title="Disconnect"
-            onPress={() => {
-              disconnect();
-              navigation.navigate(disconnectRoute);
-            }}
-            styleButton={ButtonStyle.buttonDisconnect}
-            styleText={ButtonStyle.text}
+          <MyDropDown
+            title="Menu"
+            data={dropdownData}
+            styleList={dropDownStyle.list}
+            styleElements={dropDownStyle.element}
           />
         </View>
       ),
@@ -128,13 +169,111 @@ export default function listScreen({ navigation }) {
     </>
   );
 
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  };
+  renderItemList.defaultProp = {
+    item: {
+      name: '',
+      id: '0',
+    },
+  };
+
   return (
     <View style={listStyle.listContainer}>
       <FlatList
         data={dataLists}
         renderItem={renderItemList}
-        keyExtractor={(item) => item.id}
+        keyExtractor={({ id }) => id}
       />
+      <Modal
+        animationType="slide"
+        transparent
+        visible={disconnectModalVisible}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.basicModal}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setDisconnectModalVisible(!disconnectModalVisible);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Disconnect?
+            </Text>
+            <View style={modalStyle.modalContainer}>
+              <MyButton
+                title="Yes"
+                onPress={() => {
+                  disconnect();
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
+              <MyButton
+                title="No"
+                onPress={() => {
+                  setDisconnectModalVisible(!disconnectModalVisible);
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={newItemModalVisible}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.basicModalNewList}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setNewItemModalVisible(!newItemModalVisible);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Create new list
+            </Text>
+            <View style={modalStyle.modalContainerColumn}>
+              <MyTextInput
+                placeholder={"name"}
+                value={newItemName}
+                onChangeText={(text) => {
+                  setNewItemName(text)
+                }}>
+              </MyTextInput>
+              <MyButton
+                title="Create"
+                onPress={() => {
+                  dataLists
+                  dataLists.push({
+                    name: newItemName,
+                    id: setNewID()
+                  });
+                  setDataLists((dataLists.slice()));
+                  setNewItemName('');
+                  saveNewData();
+                  setNewItemModalVisible(!newItemModalVisible);
+                }}
+                styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

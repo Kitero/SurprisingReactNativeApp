@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import boxContainer from '../Style/BoxContainerStyle';
-import MyTextInput from '../components/textinput';
+import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
@@ -28,20 +28,18 @@ export default function loginScreen({ navigation }) {
       <Text style={{ fontSize: 20 }}>Connect to your account</Text>
       <MyTextInput
         placeholder="Username"
-        selectionColor="#428AF8"
         value={username}
         onChangeText={handleUsernameChange}
       />
       <MyTextInput
         placeholder="Password"
-        selectionColor="#428AF8"
         secureTextEntry
         value={password}
         onChangeText={handlePasswordChange}
       />
       <View style={{
         marginTop: 12,
-      }}
+        }}
       >
         <MyButton
           title="Validate login"

@@ -4,85 +4,91 @@ import {
   Text,
   FlatList,
   Modal,
-  TextInput,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native-gesture-handler';
+import CheckBox from '@react-native-community/checkbox';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
-import { homeRoute, disconnectRoute } from '../routes';
-import { ScrollView } from 'react-native-gesture-handler';
+import MyTextInput from '../components/MyTextInput';
 
 export default function listItemsScreen({ route, navigation }) {
   const { name } = route.params;
-  var testname = 'test'
-  var disconnectModalVisible = false;
-  var deleteModalVisible = true;
 
-  const setDisconnectModalVisible = (status) => {
-    disconnectModalVisible = status;
-    console.log(disconnectModalVisible)
-  }
-  const setDeleteModalVisible = (status) => {
-    deleteModalVisible = status;
-    console.log(deleteModalVisible)
-  }
-
-  function disconnect() {
-    setDisconnectModalVisible(false)
-    //add disconnect feature
-  }
-
-  const deleteList = () => {
-    setDeleteModalVisible(true);
-    //add request to delete the list
-  };
-
-  // Use name to request data to the server
-  console.log(name)
-  var base_data = [
+  const baseData = [
     {
       name: 'choucroutte',
       quantity: 1,
-      id: '1',
+      id: '0',
+      done: false,
     },
     {
       name: 'poires',
       quantity: 4,
-      id: '2',
+      id: '1',
+      done: false,
     },
     {
       name: 'steak',
       quantity: 3,
-      id: '3',
+      id: '2',
+      done: false,
     },
     {
       name: 'sel',
       quantity: 1,
-      id: '4',
+      id: '3',
+      done: false,
     },
     {
       name: 'pommes',
       quantity: 5,
-      id: '5',
+      id: '4',
+      done: false,
     },
     {
       name: 'patates',
       quantity: 5,
-      id: '6',
+      id: '5',
+      done: false,
     },
     {
       name: 'farine',
       quantity: 1,
-      id: '7',
+      id: '6',
+      done: false,
     },
     {
       name: 'poussière d\'étoile',
       quantity: 2,
-      id: '8',
+      id: '7',
+      done: false,
     },
   ];
-  const [data, setData] = React.useState(base_data);
+
+  const [data, setData] = React.useState(baseData);
+  const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
+  const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
+  const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
+  const [newQuantity, setNewQuantity] = React.useState('');
+  const [newItem, setNewItem] = React.useState('');
+  const [checkBox, setCheckBox] = React.useState(false);
+
+  function disconnect() {
+    setDisconnectModalVisible(!disconnectModalVisible);
+    // add disconnect feature
+  }
+
+  const deleteList = () => {
+    setDeleteModalVisible(!deleteModalVisible);
+    // add request to delete the list
+  };
+
+  const saveNewData = () => {
+    // to do
+    console.log('Save new data');
+  };
 
   // Set "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
@@ -98,8 +104,7 @@ export default function listItemsScreen({ route, navigation }) {
           <MyButton
             title="Disconnect"
             onPress={() => {
-              disconnect();
-              navigation.navigate(disconnectRoute);
+              setDisconnectModalVisible(!disconnectModalVisible);
             }}
             styleButton={ButtonStyle.buttonDisconnect}
             styleText={ButtonStyle.text}
@@ -109,41 +114,58 @@ export default function listItemsScreen({ route, navigation }) {
     });
   }, [navigation]);
 
-  // Supposed to be a callback to update the item name but doesn't work
-  const updateValue = (value, item, index) => {
-    console.log("CL loaded")
-    console.log("END EDITING")
-    console.log(item.name)
-  }
-
-  const renderItemList = ({ item, index }) => {
-    return (
-      <View style={itemsStyle.itemsContainer}>
-        <View style={itemsStyle.item}>
-          <View style={itemsStyle.number}>
-            <TextInput
-              style={itemsStyle.numberText}
-              value={'' + item.quantity}
-              keyboardType={'number-pad'}>
-            </TextInput>
-          </View>
+  const renderItemList = ({ item, index }) => (
+    <View>
+      <View style={data[index].done ? itemsStyle.itemChecked : itemsStyle.item}>
+        <View style={data[index].done ? itemsStyle.numberChecked : itemsStyle.number}>
+          <MyTextInput
+            style={itemsStyle.numberText}
+            value={`${item.quantity}`}
+            keyboardType="number-pad"
+            onChangeText={(value) => {
+              data[index].quantity = parseInt(value, 10);
+              setData(data.slice());
+              saveNewData();
+            }}
+          />
+        </View>
+        <View style={{ flexGrow: 2 }}>
           <ScrollView
-            horizontal={true}>
-            <TextInput
+            horizontal
+          >
+            <MyTextInput
               style={itemsStyle.itemText}
-              value={item.name} //This name stay the same value and erase the new one
+              value={item.name}
               onChangeText={(value) => {
-                console.log(data[index]);
                 data[index].name = value;
-                console.log(data[index]);
                 setData(data.slice());
-              }}>
-            </TextInput>
+                saveNewData();
+              }}
+            />
           </ScrollView>
         </View>
+        <View style={{ flexGrow: 1 }}>
+          <CheckBox
+            value={data[index].done}
+            onValueChange={(value) => {
+              data[index].done = value;
+              setData(data.slice());
+              saveNewData();
+            }}
+            style={itemsStyle.checkbox}
+          />
+        </View>
       </View>
-    );
-  }
+    </View>
+  );
+
+  const handleNewQuantityChange = (quantity) => {
+    setNewQuantity(quantity);
+  };
+
+  const handleNewItemChange = (item) => {
+    setNewItem(item);
+  };
 
   return (
     <View>
@@ -151,50 +173,47 @@ export default function listItemsScreen({ route, navigation }) {
         data={data}
         renderItem={renderItemList}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={
+        ListHeaderComponent={(
           <>
             <MyButton
               title="Delete list"
-              onPress={setDeleteModalVisible}
+              onPress={() => {
+                setDeleteModalVisible(!deleteModalVisible);
+                console.log(newItemModalVisible);
+              }}
               styleButton={ButtonStyle.buttonDelete}
               styleText={ButtonStyle.text}
             />
             <MyButton
               title="Create a new item"
-              onPress={() => navigation.reset({
-                index: 0,
-                routes: [{ name: homeRoute }],
-              })}
-              styleButton={ButtonStyle.buttonTopBar}
+              onPress={() => { setNewItemModalVisible(!newItemModalVisible); }}
+              styleButton={ButtonStyle.buttonNewItem}
               styleText={ButtonStyle.text}
             />
           </>
-        }
+        )}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }
       />
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={disconnectModalVisible}
-        onRequestClose={() => {
-          console.log("Modal has been closed.");
-        }}
       >
         <View style={modalStyle.centerModal}>
           <View style={modalStyle.basicModal}>
             <MyButton
               title="X"
               onPress={() => {
-                setDisconnectModalVisible(false);
+                setDisconnectModalVisible(!disconnectModalVisible);
               }}
               styleButton={ButtonStyle.buttonClose}
               styleText={ButtonStyle.text}
             />
             <Text style={textStyle.text}>
               Disconnect?
-              </Text>
+            </Text>
             <View style={modalStyle.modalContainer}>
               <MyButton
                 title="Yes"
@@ -207,7 +226,7 @@ export default function listItemsScreen({ route, navigation }) {
               <MyButton
                 title="No"
                 onPress={() => {
-                  setDisconnectModalVisible(false);
+                  setDisconnectModalVisible(!disconnectModalVisible);
                 }}
                 styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}
@@ -218,25 +237,22 @@ export default function listItemsScreen({ route, navigation }) {
       </Modal>
       <Modal
         animationType="slide"
-        transparent={true}
-        visible={disconnectModalVisible}
-        onRequestClose={() => {
-          console.log("Modal has been closed.");
-        }}
+        transparent
+        visible={deleteModalVisible}
       >
         <View style={modalStyle.centerModal}>
           <View style={modalStyle.basicModal}>
             <MyButton
               title="X"
               onPress={() => {
-                setDisconnectModalVisible(false);
+                setDeleteModalVisible(!deleteModalVisible);
               }}
               styleButton={ButtonStyle.buttonClose}
               styleText={ButtonStyle.text}
             />
             <Text style={textStyle.text}>
               Delete this list?
-              </Text>
+            </Text>
             <View style={modalStyle.modalContainer}>
               <MyButton
                 title="Yes"
@@ -249,9 +265,72 @@ export default function listItemsScreen({ route, navigation }) {
               <MyButton
                 title="No"
                 onPress={() => {
-                  setDeleteModalVisible(false);
+                  setDeleteModalVisible(!deleteModalVisible);
                 }}
                 styleButton={modalStyle.modalButton}
+                styleText={ButtonStyle.text}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={newItemModalVisible}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.newItemModal}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setNewItemModalVisible(!newItemModalVisible);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Create new item
+            </Text>
+            <View style={modalStyle.doubleContainer}>
+              <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                <Text style={textStyle.textInput}>
+                  Item:
+                </Text>
+                <Text style={textStyle.textInput}>
+                  Quantity:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <MyTextInput
+                  placeholder="item"
+                  value={newItem}
+                  onChangeText={handleNewItemChange}
+                />
+                <MyTextInput
+                  placeholder="quantity"
+                  value={newQuantity}
+                  onChangeText={handleNewQuantityChange}
+                />
+              </View>
+            </View>
+            <View style={modalStyle.modalContainer}>
+              <MyButton
+                title="Add"
+                onPress={() => {
+                  data.push({
+                    name: newItem,
+                    quantity: isNaN(parseInt(newQuantity, 10)) ? 1 : parseInt(newQuantity, 10),
+                    id: `${data.length}`,
+                    done: false,
+                  });
+                  setData(data.slice());
+                  saveNewData();
+                  setNewItemModalVisible(!newItemModalVisible);
+                  setNewQuantity('');
+                  setNewItem('');
+                }}
+                styleButton={modalStyle.modalNewItemButton}
                 styleText={ButtonStyle.text}
               />
             </View>
@@ -267,5 +346,10 @@ listItemsScreen.propTypes = {
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
+  }).isRequired,
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      name: PropTypes.string,
+    }),
   }).isRequired,
 };

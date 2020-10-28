@@ -8,7 +8,7 @@ import { inputStyle } from '../Style/StyleSheet';
 export default function MyTextInput({
   placeholder, keyboardType, secureTextEntry,
   textContentType, style, onEndEditing,
-  placeholderTextColor, underlineColorAndroid, value, onChangeText
+  placeholderTextColor, underlineColorAndroid, value, onChangeText,
 }) {
   return (
     <>
@@ -22,14 +22,14 @@ export default function MyTextInput({
         onEndEditing={onEndEditing}
         underlineColorAndroid={underlineColorAndroid}
         value={value}
-        editable={true}
+        editable
         onChangeText={onChangeText}
       />
     </>
   );
 }
 
-//get value by onChangeText or 
+// get value by onChangeText or
 
 MyTextInput.propTypes = {
   style: PropTypes.shape({

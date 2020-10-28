@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import boxContainer from '../Style/BoxContainerStyle';
-import MyTextInput from '../components/textinput';
+import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { loginRoute } from '../routes';
