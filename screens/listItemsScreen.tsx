@@ -3,15 +3,15 @@ import {
   View,
   Text,
   FlatList,
-  Modal,
+  Modal
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native-gesture-handler';
-import CheckBox from '@react-native-community/checkbox';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import MyTextInput from '../components/MyTextInput';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function listItemsScreen({ route, navigation }) {
   const { name } = route.params;

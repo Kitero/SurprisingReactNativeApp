@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import homeScreen from './screens/homeScreen';
-import loginScreen from './screens/loginScreen';
-import listScreen from './screens/listScreen';
+import homeScreen from './screens/homescreen';
+import loginScreen from './screens/loginscreen';
+import listScreen from './screens/listscreen';
 import listItemsScreen from './screens/listItemsScreen';
-import registerScreen from './screens/registerScreen';
+import registerScreen from './screens/registerscreen';
 import useColorScheme from './hooks/useColorScheme';
 import * as routes from './routes';
 
