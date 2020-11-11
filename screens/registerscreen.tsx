@@ -5,16 +5,34 @@ import boxContainer from '../Style/BoxContainerStyle';
 import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
-import { loginRoute } from '../routes';
+import { listsRoute } from '../routes';
+import { signUp } from '../apiCaller';
 
-function createAccount() {
-  console.log('CreateAccount');
-}
 
-export default function registerScreen({ navigation }) {
+export default function registerScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
+
+  function verify_passwords() {
+    if (password1 != password2) {
+      console.log("wrong password");
+      return false;
+    }
+    return true;
+  }
+
+  const createAccount = () => {
+    if (!verify_passwords()) {
+      return false;
+    }
+    signUp(username, password1)
+      .then((json) => {
+        console.log(json);
+        setToken(json.token);
+        navigation.navigate(listsRoute);
+      });
+  }
 
   return (
     <View style={boxContainer.boxSimple}>
@@ -44,10 +62,7 @@ export default function registerScreen({ navigation }) {
       }}
       >
         <MyButton
-          onPress={() => {
-            createAccount();
-            navigation.navigate(loginRoute);
-          }}
+          onPress={() => { createAccount(); }}
           title="Create your account"
           styleButton={ButtonStyle.button}
           styleText={ButtonStyle.text}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   View, FlatList, Modal, Text,
 } from 'react-native';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
@@ -10,76 +10,20 @@ import { homeRoute, listItemsRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyTextInput from '../components/MyTextInput';
+import { getShoppingList } from '../apiCaller';
 
-export default function listScreen({ navigation }) {
-  // example datalist, replace it with server data
-  const baseData = [
-    {
-      name: 'course 1',
-      id: '1',
-    },
-    {
-      name: 'course 2',
-      id: '2',
-    },
-    {
-      name: 'course 3',
-      id: '3',
-    },
-    {
-      name: 'course 4',
-      id: '4',
-    },
-    {
-      name: 'course 5',
-      id: '5',
-    },
-    {
-      name: 'course 6',
-      id: '6',
-    },
-    {
-      name: 'course 7',
-      id: '7',
-    },
-    {
-      name: 'course 8',
-      id: '8',
-    },
-    {
-      name: 'course 9',
-      id: '9',
-    },
-    {
-      name: 'course 10',
-      id: '10',
-    },
-    {
-      name: 'course 11',
-      id: '11',
-    },
-    {
-      name: 'course 12',
-      id: '12',
-    },
-    {
-      name: 'course 13',
-      id: '13',
-    },
-    {
-      name: 'course 14',
-      id: '14',
-    },
-    {
-      name: 'course 15',
-      id: '15',
-    },
-  ];
-
-  const [dataLists, setDataLists] = React.useState(baseData);
+export default function listScreen({ navigation, token }) {
+  const [dataLists, setDataLists] = React.useState([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
   const [newItemName, setNewItemName] = React.useState('');
+
+  React.useEffect(() => {
+    getShoppingList(token)
+      .then((json) => {
+        setDataLists(json);
+      });
+  }, [token]);
 
   const disconnect = () => {
     setDisconnectModalVisible(!disconnectModalVisible);
@@ -152,9 +96,9 @@ export default function listScreen({ navigation }) {
     });
   }, [navigation]);
 
-  function loadListDetail(name) {
+  function loadListDetail(name, listId) {
     navigation.navigate(listItemsRoute, {
-      name,
+      name, listId
     });
   }
 
@@ -164,7 +108,7 @@ export default function listScreen({ navigation }) {
         title={item.name}
         styleButton={listStyle.elementStyle}
         styleText={listStyle.nameStyle}
-        onPress={() => loadListDetail(item.name)}
+        onPress={() => loadListDetail(item.name, item.id)}
       />
     </>
   );
@@ -187,7 +131,7 @@ export default function listScreen({ navigation }) {
       <FlatList
         data={dataLists}
         renderItem={renderItemList}
-        keyExtractor={({ id }) => id}
+        keyExtractor={({ id }) => String(id)}
       />
       <Modal
         animationType="slide"
@@ -257,15 +201,29 @@ export default function listScreen({ navigation }) {
               <MyButton
                 title="Create"
                 onPress={() => {
-                  dataLists
-                  dataLists.push({
-                    name: newItemName,
-                    id: setNewID()
-                  });
-                  setDataLists((dataLists.slice()));
-                  setNewItemName('');
-                  saveNewData();
-                  setNewItemModalVisible(!newItemModalVisible);
+                  fetch('http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/create-shopping-list/', {
+                    method: 'POST',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json',
+                      token: token
+                    },
+                    body: JSON.stringify({
+                      name: newItemName
+                    })
+                  })
+                    .then((response) => response.json())
+                    .then((json) => {
+                      console.log(json);
+                      // dataLists.push({
+                      //   name: json.name,
+                      //   id: json.id
+                      // });
+                      // setDataLists((dataLists.slice()));
+                      // setNewItemName('');
+                      // saveNewData();
+                      // setNewItemModalVisible(!newItemModalVisible);
+                    })
                 }}
                 styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}

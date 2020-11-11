@@ -6,12 +6,10 @@ import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
+import { signIn } from '../apiCaller';
 
-function loginAccount() {
-  console.log('LoginAccount');
-}
 
-export default function loginScreen({ navigation }) {
+export default function loginScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -21,6 +19,15 @@ export default function loginScreen({ navigation }) {
 
   function handlePasswordChange(text) {
     setPassword(text);
+  }
+
+  function loginAccount() {
+    signIn(username, password)
+      .then((json) => {
+        console.log(json);
+        setToken(json.token);
+        navigation.navigate(listsRoute);
+      });
   }
 
   return (
@@ -39,17 +46,17 @@ export default function loginScreen({ navigation }) {
       />
       <View style={{
         marginTop: 12,
-        }}
+      }}
       >
         <MyButton
           title="Validate login"
           color="#00b70e"
           onPress={() => {
             loginAccount();
-            navigation.reset({
-              index: 0,
-              routes: [{ name: listsRoute }],
-            });
+            // navigation.reset({
+            //   index: 0,
+            //   routes: [{ name: listsRoute }],
+            // });
           }}
           styleButton={ButtonStyle.button}
           styleText={ButtonStyle.text}

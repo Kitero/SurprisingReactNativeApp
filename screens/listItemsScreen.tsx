@@ -12,68 +12,33 @@ import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import MyTextInput from '../components/MyTextInput';
 import CheckBox from '@react-native-community/checkbox';
+import { createItem, getItems, getShoppingListItems, putItemInShoppingList } from '../apiCaller';
+import { Picker } from '@react-native-community/picker';
 
-export default function listItemsScreen({ route, navigation }) {
+export default function listItemsScreen({ route, navigation, token }) {
   const { name } = route.params;
 
-  const baseData = [
-    {
-      name: 'choucroutte',
-      quantity: 1,
-      id: '0',
-      done: false,
-    },
-    {
-      name: 'poires',
-      quantity: 4,
-      id: '1',
-      done: false,
-    },
-    {
-      name: 'steak',
-      quantity: 3,
-      id: '2',
-      done: false,
-    },
-    {
-      name: 'sel',
-      quantity: 1,
-      id: '3',
-      done: false,
-    },
-    {
-      name: 'pommes',
-      quantity: 5,
-      id: '4',
-      done: false,
-    },
-    {
-      name: 'patates',
-      quantity: 5,
-      id: '5',
-      done: false,
-    },
-    {
-      name: 'farine',
-      quantity: 1,
-      id: '6',
-      done: false,
-    },
-    {
-      name: 'poussière d\'étoile',
-      quantity: 2,
-      id: '7',
-      done: false,
-    },
-  ];
-
-  const [data, setData] = React.useState(baseData);
+  const [data, setData] = React.useState([]);
+  const [items, setItems] = React.useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
+  const [createItemModalVisible, setCreateItemModalVisible] = React.useState(false);
   const [newQuantity, setNewQuantity] = React.useState('');
   const [newItem, setNewItem] = React.useState('');
   const [checkBox, setCheckBox] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState('');
+
+  React.useEffect(() => {
+    getItems(token)
+      .then((json) => {
+        setItems(json);
+      })
+    getShoppingListItems(route.params.listId, token)
+      .then((json) => {
+        setData(json);
+      });
+  }, [token, route])
 
   function disconnect() {
     setDisconnectModalVisible(!disconnectModalVisible);
@@ -120,7 +85,7 @@ export default function listItemsScreen({ route, navigation }) {
         <View style={data[index].done ? itemsStyle.numberChecked : itemsStyle.number}>
           <MyTextInput
             style={itemsStyle.numberText}
-            value={`${item.quantity}`}
+            value={`${1}`}
             keyboardType="number-pad"
             onChangeText={(value) => {
               data[index].quantity = parseInt(value, 10);
@@ -185,7 +150,7 @@ export default function listItemsScreen({ route, navigation }) {
               styleText={ButtonStyle.text}
             />
             <MyButton
-              title="Create a new item"
+              title="Add item"
               onPress={() => { setNewItemModalVisible(!newItemModalVisible); }}
               styleButton={ButtonStyle.buttonNewItem}
               styleText={ButtonStyle.text}
@@ -290,47 +255,91 @@ export default function listItemsScreen({ route, navigation }) {
               styleText={ButtonStyle.text}
             />
             <Text style={textStyle.text}>
-              Create new item
+              Add item
             </Text>
             <View style={modalStyle.doubleContainer}>
               <View style={{ flex: 1, alignItems: 'flex-end' }}>
                 <Text style={textStyle.textInput}>
                   Item:
                 </Text>
-                <Text style={textStyle.textInput}>
-                  Quantity:
-                </Text>
               </View>
               <View style={{ flex: 1 }}>
-                <MyTextInput
-                  placeholder="item"
-                  value={newItem}
-                  onChangeText={handleNewItemChange}
-                />
-                <MyTextInput
-                  placeholder="quantity"
-                  value={newQuantity}
-                  onChangeText={handleNewQuantityChange}
-                />
+                <Picker
+                  selectedValue={selectedItem}
+                  onValueChange={(itemValue, itemIndex) => {
+                    if (itemValue == "-1") {
+                      console.log('Create new');
+                      setCreateItemModalVisible(true);
+                    } else {
+                      setSelectedItem(itemValue);
+                    }
+                    console.log(itemValue);
+                    console.log(itemIndex);
+                  }}
+                >
+                  {items.map((value) => <Picker.Item key={value.name} label={value.name} value={value.id} />)}
+                  <Picker.Item key="Create new" value="-1" label="Create new..." />
+                </Picker>
               </View>
             </View>
             <View style={modalStyle.modalContainer}>
               <MyButton
                 title="Add"
                 onPress={() => {
-                  data.push({
-                    name: newItem,
-                    quantity: isNaN(parseInt(newQuantity, 10)) ? 1 : parseInt(newQuantity, 10),
-                    id: `${data.length}`,
-                    done: false,
-                  });
-                  setData(data.slice());
-                  saveNewData();
-                  setNewItemModalVisible(!newItemModalVisible);
-                  setNewQuantity('');
-                  setNewItem('');
+                  putItemInShoppingList(route.params.listId, selectedItem, token)
+                    .then((json) => {
+                      console.log(json);
+                      data.push({
+                        name: 'NEW NAME',
+                        id: String(json.id),
+                        done: json.checked
+                      });
+                      setData(data.slice());
+                      setNewItemModalVisible(false);
+                    });
                 }}
                 styleButton={modalStyle.modalNewItemButton}
+                styleText={ButtonStyle.text}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        transparent
+        animationType="slide"
+        visible={createItemModalVisible}
+      >
+        <View style={modalStyle.centerModal}>
+          <View style={modalStyle.newItemModal}>
+            <MyButton
+              title="X"
+              onPress={() => {
+                setCreateItemModalVisible(false);
+              }}
+              styleButton={ButtonStyle.buttonClose}
+              styleText={ButtonStyle.text}
+            />
+            <Text style={textStyle.text}>
+              Create new item
+            </Text>
+            <View style={{ ...modalStyle.modalContainerColumn, justifyContent: "space-around", height: "50%" }}>
+              <MyTextInput
+                placeholder="Item name..."
+                value={newItem}
+                onChangeText={handleNewItemChange}
+              />
+              <MyButton
+                title="Create"
+                onPress={() => {
+                  createItem(newItem, token)
+                    .then((json) => {
+                      setNewItem('');
+                      setCreateItemModalVisible(false);
+                      items.push(json);
+                      setItems(items.slice());
+                    })
+                }}
                 styleText={ButtonStyle.text}
               />
             </View>
