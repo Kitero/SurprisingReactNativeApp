@@ -84,7 +84,7 @@ def get_items_from_shopping_list(request, shopping_list_id):
 @permission_classes([IsAuthenticated])
 def check_list_item(request, shopping_list_item_id):
     query = models.ShoppingListItem.objects.get(pk=shopping_list_item_id)
-    data = {'checked': True}
+    data = {'checked': not query.checked}
     serializer = serializers.ShoppingListItemSerializer(query, data=data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()

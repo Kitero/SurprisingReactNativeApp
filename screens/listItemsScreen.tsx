@@ -12,7 +12,7 @@ import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import MyTextInput from '../components/MyTextInput';
 import CheckBox from '@react-native-community/checkbox';
-import { createItem, getItems, getShoppingListItems, putItemInShoppingList } from '../apiCaller';
+import { checkShippingListItem, createItem, getItems, getShoppingListItems, putItemInShoppingList } from '../apiCaller';
 import { Picker } from '@react-native-community/picker';
 
 export default function listItemsScreen({ route, navigation, token }) {
@@ -99,35 +99,29 @@ export default function listItemsScreen({ route, navigation, token }) {
           <ScrollView
             horizontal
           >
-            <MyTextInput
+            <Text
               style={itemsStyle.itemText}
-              value={item.name}
-              onChangeText={(value) => {
-                data[index].name = value;
-                setData(data.slice());
-                saveNewData();
-              }}
-            />
+            >
+              {item.item}
+            </Text>
           </ScrollView>
         </View>
         <View style={{ flexGrow: 1 }}>
           <CheckBox
-            value={data[index].done}
+            value={data[index].checked}
             onValueChange={(value) => {
-              data[index].done = value;
-              setData(data.slice());
-              saveNewData();
+              checkShippingListItem(item.id, token)
+                .then((json) => {
+                  data[index].checked = json.checked;
+                });
             }}
+            tintColors={{ true: "white", false: "white" }}
             style={itemsStyle.checkbox}
           />
         </View>
       </View>
     </View>
   );
-
-  const handleNewQuantityChange = (quantity) => {
-    setNewQuantity(quantity);
-  };
 
   const handleNewItemChange = (item) => {
     setNewItem(item);
@@ -138,7 +132,9 @@ export default function listItemsScreen({ route, navigation, token }) {
       <FlatList
         data={data}
         renderItem={renderItemList}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => {
+          return String(item.id);
+        }}
         ListHeaderComponent={(
           <>
             <MyButton
@@ -274,8 +270,6 @@ export default function listItemsScreen({ route, navigation, token }) {
                     } else {
                       setSelectedItem(itemValue);
                     }
-                    console.log(itemValue);
-                    console.log(itemIndex);
                   }}
                 >
                   {items.map((value) => <Picker.Item key={value.name} label={value.name} value={value.id} />)}
@@ -289,12 +283,7 @@ export default function listItemsScreen({ route, navigation, token }) {
                 onPress={() => {
                   putItemInShoppingList(route.params.listId, selectedItem, token)
                     .then((json) => {
-                      console.log(json);
-                      data.push({
-                        name: 'NEW NAME',
-                        id: String(json.id),
-                        done: json.checked
-                      });
+                      data.push(json);
                       setData(data.slice());
                       setNewItemModalVisible(false);
                     });
