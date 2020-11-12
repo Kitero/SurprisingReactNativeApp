@@ -1,7 +1,6 @@
 from rest_framework import serializers
 import api.models as models
 import api.tools as tools
-import api.serializers as api_serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,7 +31,15 @@ class ShoppingListSerializer(serializers.ModelSerializer):
 
 
 class ShoppingListItemSerializer(serializers.ModelSerializer):
-    item = serializers.PrimaryKeyRelatedField(read_only=True, default=api_serializers.ShoppingItemSerializer)
     class Meta:
         model = models.ShoppingListItem
         fields = ('id', 'shopping_list', 'item', 'checked')
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'shopping_list': instance.shopping_list.id,
+            'item': instance.item.name,
+            'item_id': instance.item.id,
+            'checked': instance.checked
+        }

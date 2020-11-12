@@ -46,7 +46,7 @@ def get_items(request):
 @permission_classes([IsAuthenticated])
 def create_shopping_list(request):
     data = {
-        **request.data,
+        **(request.data if type(request.data) == dict else request.data.dict()),
         'created_by': request.user.pk
     }
     serializer = serializers.ShoppingListSerializer(data=data)

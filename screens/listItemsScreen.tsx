@@ -36,6 +36,7 @@ export default function listItemsScreen({ route, navigation, token }) {
       })
     getShoppingListItems(route.params.listId, token)
       .then((json) => {
+        console.log(json);
         setData(json);
       });
   }, [token, route])
