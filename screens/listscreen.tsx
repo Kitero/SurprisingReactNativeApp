@@ -10,56 +10,41 @@ import { homeRoute, listItemsRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyTextInput from '../components/MyTextInput';
-import { getShoppingList } from '../apiCaller';
+import { createShoppingList, getShoppingList } from '../apiCaller';
+import MyErrorPrinter from '../components/MyErrorPrinter';
+import CreateListModal from '../modals/createListModal';
+import DisconnectModal from '../modals/disconnectModal';
+import { UserContext } from '../contexts/userContext';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
-export default function listScreen({ navigation, token }) {
+function ListScreenComponent({ navigation, token, setToken }) {
   const [dataLists, setDataLists] = React.useState([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
-  const [newItemName, setNewItemName] = React.useState('');
 
   React.useEffect(() => {
     getShoppingList(token)
       .then((json) => {
         setDataLists(json);
-      });
-  }, [token]);
-
-  const disconnect = () => {
-    setDisconnectModalVisible(!disconnectModalVisible);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: homeRoute }],
-    });
-  }
-
-  const setNewID = () => {
-    if (dataLists.length == 0) {
-      return '0';
-    }
-    return ('' + (parseInt(dataLists[dataLists.length - 1].id, 10) + 1));
-  }
-
-  const saveNewData = () => {
-    console.log('Save new data');
-  }
+      }, (errors) => { });
+  }, []);
 
   const setPP = () => {
     console.log('set PP');
   }
 
-  const createNewList = () => {
-    console.log("create new list");
+  const OpenModalNewList = () => {
+    setNewItemModalVisible(true);
   }
 
-  const triggerModalNewList = () => {
-    setNewItemModalVisible(!newItemModalVisible);
+  const OpenDisconnectModal = () => {
+    setDisconnectModalVisible(true);
   }
 
   const dropdownData = [
     {
       title: 'Create new list',
-      callBack: triggerModalNewList,
+      callBack: OpenModalNewList,
       id: '1',
     },
     {
@@ -69,12 +54,11 @@ export default function listScreen({ navigation, token }) {
     },
     {
       title: 'Disconnect',
-      callBack: disconnect,
+      callBack: OpenDisconnectModal,
       id: '3',
     },
   ];
 
-  // Set "Create new list" and "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -99,6 +83,24 @@ export default function listScreen({ navigation, token }) {
   function loadListDetail(name, listId) {
     navigation.navigate(listItemsRoute, {
       name, listId
+    });
+  }
+
+  function handleCreateShoppingList(listName, setErrors) {
+    createShoppingList(listName, token)
+      .then((json) => {
+        dataLists.push(json);
+        setDataLists(dataLists.slice());
+      }, (errors) => {
+        setErrors(errors);
+      });
+  }
+
+  function disconnect() {
+    setToken('');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: homeRoute }]
     });
   }
 
@@ -133,113 +135,35 @@ export default function listScreen({ navigation, token }) {
         renderItem={renderItemList}
         keyExtractor={({ id }) => String(id)}
       />
-      <Modal
-        animationType="slide"
-        transparent
+      <DisconnectModal
         visible={disconnectModalVisible}
-      >
-        <View style={modalStyle.centerModal}>
-          <View style={modalStyle.basicModal}>
-            <MyButton
-              title="X"
-              onPress={() => {
-                setDisconnectModalVisible(!disconnectModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonClose}
-              styleText={ButtonStyle.text}
-            />
-            <Text style={textStyle.text}>
-              Disconnect?
-            </Text>
-            <View style={modalStyle.modalContainer}>
-              <MyButton
-                title="Yes"
-                onPress={() => {
-                  disconnect();
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-              <MyButton
-                title="No"
-                onPress={() => {
-                  setDisconnectModalVisible(!disconnectModalVisible);
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent
+        setVisible={setDisconnectModalVisible}
+        onValidate={disconnect}
+      />
+      <CreateListModal
         visible={newItemModalVisible}
-      >
-        <View style={modalStyle.centerModal}>
-          <View style={modalStyle.basicModalNewList}>
-            <MyButton
-              title="X"
-              onPress={() => {
-                setNewItemModalVisible(!newItemModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonClose}
-              styleText={ButtonStyle.text}
-            />
-            <Text style={textStyle.text}>
-              Create new list
-            </Text>
-            <View style={modalStyle.modalContainerColumn}>
-              <MyTextInput
-                placeholder={"name"}
-                value={newItemName}
-                onChangeText={(text) => {
-                  setNewItemName(text)
-                }}>
-              </MyTextInput>
-              <MyButton
-                title="Create"
-                onPress={() => {
-                  fetch('http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/create-shopping-list/', {
-                    method: 'POST',
-                    headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json',
-                      token: token
-                    },
-                    body: JSON.stringify({
-                      name: newItemName
-                    })
-                  })
-                    .then((response) => response.json())
-                    .then((json) => {
-                      console.log(json);
-                      // dataLists.push({
-                      //   name: json.name,
-                      //   id: json.id
-                      // });
-                      // setDataLists((dataLists.slice()));
-                      // setNewItemName('');
-                      // saveNewData();
-                      // setNewItemModalVisible(!newItemModalVisible);
-                    })
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+        setVisible={setNewItemModalVisible}
+        onValidate={handleCreateShoppingList}
+      />
     </View>
   );
 }
 
-listScreen.propTypes = {
+ListScreenComponent.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
   }).isRequired,
+  token: PropTypes.string.isRequired
 };
+
+export default function ListScreen(props) {
+  return (
+    <UserContext.Consumer>
+      {
+        (value) => (<ListScreenComponent {...props} {...value} />)
+      }
+    </UserContext.Consumer>
+  )
+}

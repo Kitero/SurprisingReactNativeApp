@@ -14,19 +14,23 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const colorScheme = useColorScheme();
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState('');
 
-  const initialRouteName = token !== undefined ? "HomePage" : "lists"
+  const initialRouteName = token.length == 0 ? "HomePage" : "lists"
 
   return (
     <NavigationContainer>
       <UserContext.Provider value={{ token, setToken }}>
-        <Stack.Navigator colorScheme={colorScheme} initialRouteName="HomePage">
+        <Stack.Navigator colorScheme={colorScheme} initialRouteName={initialRouteName}>
           <Stack.Screen name={routes.homeRoute} component={homeScreen} options={{ title: 'Shopping list' }} />
+          <Stack.Screen name={routes.registerRoute} component={RegisterScreen} />
           <Stack.Screen name={routes.loginRoute} component={LoginScreen} />
           <Stack.Screen name={routes.listsRoute} component={ListScreen} />
-          <Stack.Screen name={routes.listItemsRoute} component={ListItemsScreen} />
-          <Stack.Screen name={routes.registerRoute} component={RegisterScreen} />
+          <Stack.Screen name={routes.listItemsRoute}>
+            {
+              props => <ListItemsScreen {...props} token={token} />
+            }
+          </Stack.Screen>
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer >

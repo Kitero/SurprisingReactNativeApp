@@ -23,7 +23,6 @@ function fetchApi(path, method, headers = {}, data = {}) {
                 else {
                     response.json().then((json) => {
                         let errors = [];
-                        console.log(json)
                         for (let e in json) {
                             errors = errors.concat(json[e]);
                         }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 import ErrorPrinterStyle from '../Style/ErrorPrinterStyle';
 
-export default function myErrorPrinter({ errors }) {
+export default function MyErrorPrinter({ errors }) {
     return (
         <View style={ErrorPrinterStyle.container}>
             {
@@ -19,6 +19,6 @@ export default function myErrorPrinter({ errors }) {
     )
 }
 
-myErrorPrinter.propTypes = {
+MyErrorPrinter.propTypes = {
     errors: PropTypes.array.isRequired
 };

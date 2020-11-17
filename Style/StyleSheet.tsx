@@ -152,6 +152,17 @@ const modalStyle = StyleSheet.create({
     margin: 20,
     marginTop: 35,
   },
+  modalRejectButton: {
+    paddingTop: 8,
+    paddingLeft: 30,
+    paddingRight: 30,
+    backgroundColor: 'red',
+    borderRadius: 5,
+    borderColor: 'red',
+    height: 40,
+    margin: 20,
+    marginTop: 35,
+  },
   modalNewItemButton: {
     paddingTop: 8,
     paddingLeft: 30,

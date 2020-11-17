@@ -29,7 +29,10 @@ export default function loginScreen({ navigation }) {
     signIn(username, password)
       .then((json) => {
         uesrContext.setToken(json.token);
-        navigation.navigate(listsRoute);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: listsRoute }]
+        });
       }, (errors) => {
         setErrors(errors);
       });

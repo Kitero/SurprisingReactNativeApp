@@ -33,7 +33,10 @@ export default function registerScreen({ navigation }) {
     signUp(username, password1)
       .then((json) => {
         userContext.setToken(json.token);
-        navigation.navigate(listsRoute);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: listsRoute }]
+        });
       }, (errors) => {
         setErrors(errors);
       });
