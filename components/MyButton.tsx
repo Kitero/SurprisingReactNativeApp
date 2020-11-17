@@ -8,13 +8,21 @@ import PropTypes from 'prop-types';
 import { ButtonStyle } from '../Style/StyleSheet';
 
 export default function MyButton({
-  onPress, styleButton, styleText, title,
+  onPress, styleButton, styleText, title, disable, disableColor
 }) {
+  let buttonStyle = styleButton;
+  if (disable) {
+    buttonStyle = {
+      ...buttonStyle,
+      backgroundColor: disableColor
+    }
+  }
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disable}
     >
-      <View style={styleButton}>
+      <View style={buttonStyle}>
         <Text style={styleText}>
           {title}
         </Text>
@@ -46,11 +54,15 @@ MyButton.propTypes = {
   }),
   onPress: PropTypes.func,
   title: PropTypes.string,
+  disable: PropTypes.bool,
+  disableColor: PropTypes.string
 };
 
 MyButton.defaultProps = {
   title: 'Button',
   styleButton: ButtonStyle.button,
   styleText: ButtonStyle.text,
-  onPress: () => {},
+  onPress: () => { },
+  disable: false,
+  disableColor: 'grey'
 };

@@ -16,10 +16,10 @@ function fetchApi(path, method, headers = {}, data = {}) {
         fetch(apiUrl + path, request_option)
             .then((response) => {
                 if (response.ok) {
-                    response.json().then((json) => { resolve(json) })
+                    response.json().then((json) => { resolve(json) });
                 }
                 else {
-                    reject()
+                    response.json().then((json) => { reject(json) });
                 }
             });
     })

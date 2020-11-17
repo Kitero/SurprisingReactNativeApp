@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import boxContainer from '../Style/BoxContainerStyle';
 import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
+import MyErrorPrinter from '../components/MyErrorPrinter';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
@@ -13,10 +14,12 @@ export default function registerScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
+  const [errors, setErrors] = React.useState([]);
+  const [buttonDisable, setButtonDisable] = React.useState(true);
 
   function verify_passwords() {
     if (password1 != password2) {
-      console.log("wrong password");
+      setErrors(['Password don\'t match']);
       return false;
     }
     return true;
@@ -28,15 +31,29 @@ export default function registerScreen({ navigation, setToken }) {
     }
     signUp(username, password1)
       .then((json) => {
-        console.log(json);
         setToken(json.token);
         navigation.navigate(listsRoute);
+      }, (error) => {
+        let errors = [];
+        for (let e in error) {
+          errors = errors.concat(error[e]);
+        }
+        setErrors(errors);
       });
+  }
+
+  React.useEffect(() => {
+    setButtonDisable(needDisable());
+  }, [username, password1, password2])
+
+  const needDisable = () => {
+    return username.length == 0 || password1.length == 0 || password2.length == 0;
   }
 
   return (
     <View style={boxContainer.boxSimple}>
       <Text style={{ fontSize: 20 }}>Create your account</Text>
+      <MyErrorPrinter errors={errors} />
       <MyTextInput
         placeholder="Username"
         textContentType="username"
@@ -66,6 +83,7 @@ export default function registerScreen({ navigation, setToken }) {
           title="Create your account"
           styleButton={ButtonStyle.button}
           styleText={ButtonStyle.text}
+          disable={buttonDisable}
         />
       </View>
     </View>
