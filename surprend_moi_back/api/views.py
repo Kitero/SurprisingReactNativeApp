@@ -21,7 +21,7 @@ def sign_in(request):
                                         password=request.data['password'])
         serializer = serializers.UserSerializer(query)
     except models.User.DoesNotExist:
-        return Response('Invalid username or password', status=status.HTTP_404_NOT_FOUND)
+        return Response({'details':['Invalid username or password']}, status=status.HTTP_404_NOT_FOUND)
     return Response(serializer.data)
 
 

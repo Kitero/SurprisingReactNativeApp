@@ -17,7 +17,7 @@ export default function registerScreen({ navigation, setToken }) {
   const [errors, setErrors] = React.useState([]);
   const [buttonDisable, setButtonDisable] = React.useState(true);
 
-  function verify_passwords() {
+  const verify_passwords = () => {
     if (password1 != password2) {
       setErrors(['Password don\'t match']);
       return false;
@@ -33,22 +33,18 @@ export default function registerScreen({ navigation, setToken }) {
       .then((json) => {
         setToken(json.token);
         navigation.navigate(listsRoute);
-      }, (error) => {
-        let errors = [];
-        for (let e in error) {
-          errors = errors.concat(error[e]);
-        }
+      }, (errors) => {
         setErrors(errors);
       });
   }
 
-  React.useEffect(() => {
-    setButtonDisable(needDisable());
-  }, [username, password1, password2])
-
   const needDisable = () => {
     return username.length == 0 || password1.length == 0 || password2.length == 0;
   }
+
+  React.useEffect(() => {
+    setButtonDisable(needDisable());
+  }, [username, password1, password2]);
 
   return (
     <View style={boxContainer.boxSimple}>

@@ -1,3 +1,5 @@
+import { object } from "prop-types";
+
 const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
 
 function fetchApi(path, method, headers = {}, data = {}) {
@@ -19,7 +21,14 @@ function fetchApi(path, method, headers = {}, data = {}) {
                     response.json().then((json) => { resolve(json) });
                 }
                 else {
-                    response.json().then((json) => { reject(json) });
+                    response.json().then((json) => {
+                        let errors = [];
+                        console.log(json)
+                        for (let e in json) {
+                            errors = errors.concat(json[e]);
+                        }
+                        reject(errors);
+                    });
                 }
             });
     })

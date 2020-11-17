@@ -7,11 +7,14 @@ import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signIn } from '../apiCaller';
+import MyErrorPrinter from '../components/MyErrorPrinter';
 
 
 export default function loginScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [buttonDisable, setButtonDisable] = React.useState(true);
+  const [errors, setErrors] = React.useState([]);
 
   function handleUsernameChange(text) {
     setUsername(text);
@@ -24,14 +27,24 @@ export default function loginScreen({ navigation, setToken }) {
   function loginAccount() {
     signIn(username, password)
       .then((json) => {
-        console.log(json);
         setToken(json.token);
         navigation.navigate(listsRoute);
+      }, (errors) => {
+        setErrors(errors);
       });
   }
 
+  const needDisable = () => {
+    return username.length == 0 || password.length == 0;
+  }
+
+  React.useEffect(() => {
+    setButtonDisable(needDisable());
+  }, [username, password])
+
   return (
     <View style={boxContainer.boxSimple}>
+      <MyErrorPrinter errors={errors} />
       <Text style={{ fontSize: 20 }}>Connect to your account</Text>
       <MyTextInput
         placeholder="Username"
@@ -53,13 +66,10 @@ export default function loginScreen({ navigation, setToken }) {
           color="#00b70e"
           onPress={() => {
             loginAccount();
-            // navigation.reset({
-            //   index: 0,
-            //   routes: [{ name: listsRoute }],
-            // });
           }}
           styleButton={ButtonStyle.button}
           styleText={ButtonStyle.text}
+          disable={buttonDisable}
         />
       </View>
     </View>
