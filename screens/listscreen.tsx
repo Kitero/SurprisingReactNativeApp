@@ -1,21 +1,53 @@
 import * as React from 'react';
 import {
-  View, FlatList, Modal, Text,
+  View, FlatList,
 } from 'react-native';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
-import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
 import { homeRoute, listItemsRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
-import MyTextInput from '../components/MyTextInput';
 import { createShoppingList, getShoppingList } from '../apiCaller';
-import MyErrorPrinter from '../components/MyErrorPrinter';
-import CreateListModal from '../modals/createListModal';
-import DisconnectModal from '../modals/disconnectModal';
+import SingleFieldModal from '../modals/singleFieldModal';
+import YesNoModal from '../modals/yesNoModal';
 import { UserContext } from '../contexts/userContext';
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+
+const getRenderItemList = (navigation) => {
+  const renderItemList = ({ item }) => {
+    function loadListDetail(name, listId) {
+      navigation.navigate(listItemsRoute, {
+        name, listId,
+      });
+    }
+
+    return (
+      <>
+        <MyButton
+          title={item.name}
+          styleButton={listStyle.elementStyle}
+          styleText={listStyle.nameStyle}
+          onPress={() => loadListDetail(item.name, item.id)}
+        />
+      </>
+    );
+  };
+
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  };
+
+  renderItemList.defaultProps = {
+    item: {
+      name: '',
+      id: '0',
+    },
+  };
+  return renderItemList;
+};
 
 function ListScreenComponent({ navigation, token, setToken }) {
   const [dataLists, setDataLists] = React.useState([]);
@@ -26,20 +58,20 @@ function ListScreenComponent({ navigation, token, setToken }) {
     getShoppingList(token)
       .then((json) => {
         setDataLists(json);
-      }, (errors) => { });
+      }, () => { });
   }, []);
 
   const setPP = () => {
     console.log('set PP');
-  }
+  };
 
   const OpenModalNewList = () => {
     setNewItemModalVisible(true);
-  }
+  };
 
   const OpenDisconnectModal = () => {
     setDisconnectModalVisible(true);
-  }
+  };
 
   const dropdownData = [
     {
@@ -80,12 +112,6 @@ function ListScreenComponent({ navigation, token, setToken }) {
     });
   }, [navigation]);
 
-  function loadListDetail(name, listId) {
-    navigation.navigate(listItemsRoute, {
-      name, listId
-    });
-  }
-
   function handleCreateShoppingList(listName, setErrors) {
     createShoppingList(listName, token)
       .then((json) => {
@@ -100,47 +126,24 @@ function ListScreenComponent({ navigation, token, setToken }) {
     setToken('');
     navigation.reset({
       index: 0,
-      routes: [{ name: homeRoute }]
+      routes: [{ name: homeRoute }],
     });
   }
-
-  const renderItemList = ({ item }) => (
-    <>
-      <MyButton
-        title={item.name}
-        styleButton={listStyle.elementStyle}
-        styleText={listStyle.nameStyle}
-        onPress={() => loadListDetail(item.name, item.id)}
-      />
-    </>
-  );
-
-  renderItemList.propTypes = {
-    item: PropTypes.shape({
-      name: PropTypes.string,
-      id: PropTypes.number,
-    }),
-  };
-  renderItemList.defaultProp = {
-    item: {
-      name: '',
-      id: '0',
-    },
-  };
 
   return (
     <View style={listStyle.listContainer}>
       <FlatList
         data={dataLists}
-        renderItem={renderItemList}
+        renderItem={getRenderItemList(navigation)}
         keyExtractor={({ id }) => String(id)}
+
       />
-      <DisconnectModal
+      <YesNoModal
         visible={disconnectModalVisible}
         setVisible={setDisconnectModalVisible}
         onValidate={disconnect}
       />
-      <CreateListModal
+      <SingleFieldModal
         visible={newItemModalVisible}
         setVisible={setNewItemModalVisible}
         onValidate={handleCreateShoppingList}
@@ -155,7 +158,7 @@ ListScreenComponent.propTypes = {
     reset: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
   }).isRequired,
-  token: PropTypes.string.isRequired
+  token: PropTypes.string.isRequired,
 };
 
 export default function ListScreen(props) {
@@ -165,5 +168,5 @@ export default function ListScreen(props) {
         (value) => (<ListScreenComponent {...props} {...value} />)
       }
     </UserContext.Consumer>
-  )
+  );
 }

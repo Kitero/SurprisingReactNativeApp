@@ -26,13 +26,9 @@ export default function App() {
           <Stack.Screen name={routes.registerRoute} component={RegisterScreen} />
           <Stack.Screen name={routes.loginRoute} component={LoginScreen} />
           <Stack.Screen name={routes.listsRoute} component={ListScreen} />
-          <Stack.Screen name={routes.listItemsRoute}>
-            {
-              props => <ListItemsScreen {...props} token={token} />
-            }
-          </Stack.Screen>
+          <Stack.Screen name={routes.listItemsRoute} component={ListItemsScreen} />
         </Stack.Navigator>
       </UserContext.Provider>
-    </NavigationContainer >
+    </NavigationContainer>
   );
 }

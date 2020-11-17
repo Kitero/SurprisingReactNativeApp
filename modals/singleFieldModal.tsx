@@ -6,7 +6,7 @@ import MyErrorPrinter from '../components/MyErrorPrinter';
 import MyTextInput from '../components/MyTextInput';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 
-export default function CreateListModal({ visible, setVisible, onValidate }) {
+export default function SingleFieldModal({ visible, setVisible, onValidate }) {
 	const [errors, setErrors] = React.useState([]);
 	const [listName, setListName] = React.useState('');
 	const [buttonDisable, setButtonDisable] = React.useState(true);
@@ -63,12 +63,12 @@ export default function CreateListModal({ visible, setVisible, onValidate }) {
 	)
 }
 
-CreateListModal.propTypes = {
+SingleFieldModal.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	setVisible: PropTypes.func.isRequired,
 	onValidate: PropTypes.func
 }
 
-CreateListModal.defaultProps = {
+SingleFieldModal.defaultProps = {
 	onValidate: (listName, setErrors) => { }
 }

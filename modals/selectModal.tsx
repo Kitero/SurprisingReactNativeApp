@@ -37,6 +37,9 @@ export default function SelectModal({
     getElems()
       .then((elem: Array<Object>) => {
         setItems(elem);
+        if (elem.length > 0) {
+          setSelectedItem(elem[0][elemValueFieldName]);
+        }
       });
   }, [title, fieldName, getElems, elemValueFieldName, elemLabelFieldName]);
 
