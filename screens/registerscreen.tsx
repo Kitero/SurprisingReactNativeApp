@@ -8,9 +8,10 @@ import MyErrorPrinter from '../components/MyErrorPrinter';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
+import { UserContext } from '../contexts/userContext';
 
 
-export default function registerScreen({ navigation, setToken }) {
+export default function registerScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
@@ -25,13 +26,13 @@ export default function registerScreen({ navigation, setToken }) {
     return true;
   }
 
-  const createAccount = () => {
+  const createAccount = (userContext) => {
     if (!verify_passwords()) {
       return false;
     }
     signUp(username, password1)
       .then((json) => {
-        setToken(json.token);
+        userContext.setToken(json.token);
         navigation.navigate(listsRoute);
       }, (errors) => {
         setErrors(errors);
@@ -74,13 +75,17 @@ export default function registerScreen({ navigation, setToken }) {
         marginTop: 12,
       }}
       >
-        <MyButton
-          onPress={() => { createAccount(); }}
-          title="Create your account"
-          styleButton={ButtonStyle.button}
-          styleText={ButtonStyle.text}
-          disable={buttonDisable}
-        />
+        <UserContext.Consumer>
+          {(userContext) => (
+            <MyButton
+              onPress={() => { createAccount(userContext); }}
+              title="Create your account"
+              styleButton={ButtonStyle.button}
+              styleText={ButtonStyle.text}
+              disable={buttonDisable}
+            />
+          )}
+        </UserContext.Consumer>
       </View>
     </View>
   );

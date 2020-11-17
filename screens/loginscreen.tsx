@@ -8,9 +8,10 @@ import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signIn } from '../apiCaller';
 import MyErrorPrinter from '../components/MyErrorPrinter';
+import { UserContext } from '../contexts/userContext';
 
 
-export default function loginScreen({ navigation, setToken }) {
+export default function loginScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [buttonDisable, setButtonDisable] = React.useState(true);
@@ -24,10 +25,10 @@ export default function loginScreen({ navigation, setToken }) {
     setPassword(text);
   }
 
-  function loginAccount() {
+  function loginAccount(uesrContext) {
     signIn(username, password)
       .then((json) => {
-        setToken(json.token);
+        uesrContext.setToken(json.token);
         navigation.navigate(listsRoute);
       }, (errors) => {
         setErrors(errors);
@@ -40,12 +41,12 @@ export default function loginScreen({ navigation, setToken }) {
 
   React.useEffect(() => {
     setButtonDisable(needDisable());
-  }, [username, password])
+  }, [username, password]);
 
   return (
     <View style={boxContainer.boxSimple}>
-      <MyErrorPrinter errors={errors} />
       <Text style={{ fontSize: 20 }}>Connect to your account</Text>
+      <MyErrorPrinter errors={errors} />
       <MyTextInput
         placeholder="Username"
         value={username}
@@ -57,20 +58,24 @@ export default function loginScreen({ navigation, setToken }) {
         value={password}
         onChangeText={handlePasswordChange}
       />
-      <View style={{
-        marginTop: 12,
-      }}
+      <View
+        style={{
+          marginTop: 12,
+        }}
       >
-        <MyButton
-          title="Validate login"
-          color="#00b70e"
-          onPress={() => {
-            loginAccount();
-          }}
-          styleButton={ButtonStyle.button}
-          styleText={ButtonStyle.text}
-          disable={buttonDisable}
-        />
+        <UserContext.Consumer>
+          {(value) => (
+            <MyButton
+              title="Validate login"
+              onPress={() => {
+                loginAccount(value);
+              }}
+              styleButton={ButtonStyle.button}
+              styleText={ButtonStyle.text}
+              disable={buttonDisable}
+            />
+          )}
+        </UserContext.Consumer>
       </View>
     </View>
   );
