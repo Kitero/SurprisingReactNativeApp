@@ -5,13 +5,13 @@ import {
   FlatList,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native-gesture-handler';
-import CheckBox from '@react-native-community/checkbox';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import {
-  checkShippingListItem, createItem, deleteShoppingList, getItems, getShoppingListItems, putItemInShoppingList,
+  checkShippingListItem, createItem, deleteShoppingList, getItems,
+  getShoppingListItems, putItemInShoppingList,
 } from '../apiCaller';
 import YesNoModal from '../modals/yesNoModal';
 import SingleFieldModal from '../modals/singleFieldModal';
@@ -53,7 +53,7 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
 
   const deleteList = () => {
     deleteShoppingList(listId, token)
-      .then((json) => {
+      .then(() => {
         navigation.goBack();
       }, () => { });
   };
@@ -116,31 +116,22 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
   }, [navigation]);
 
   const renderItemList = ({ item, index }) => (
-    <View>
+    <TouchableOpacity onPress={() => {
+      checkShippingListItem(item.id, token)
+        .then((json) => {
+          data[index].checked = json.checked;
+          setData(sortData().slice());
+        }, () => { });
+    }}
+    >
       <View style={data[index].checked ? itemsStyle.itemChecked : itemsStyle.item}>
-        <View style={{ flexGrow: 2 }}>
-          <ScrollView
-            horizontal
-          >
-            <Text
-              style={itemsStyle.itemText}
-            >
-              {item.item}
-            </Text>
-          </ScrollView>
-        </View>
-        <View style={{ flexGrow: 1 }}>
-          <CheckBox
-            value={data[index].checked}
-            onTouchEnd={() => {
-              handleCheckItem(item, index);
-            }}
-            tintColors={{ true: 'white', false: 'white' }}
-            style={itemsStyle.checkbox}
-          />
-        </View>
+        <Text
+          style={itemsStyle.itemText}
+        >
+          {item.item}
+        </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

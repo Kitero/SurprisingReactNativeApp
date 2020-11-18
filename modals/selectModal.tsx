@@ -106,7 +106,7 @@ SelectModal.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       name: PropTypes.string,
-      listId: PropTypes.string,
+      listId: PropTypes.number,
     }),
   }).isRequired,
   visible: PropTypes.bool,
