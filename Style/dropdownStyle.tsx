@@ -40,6 +40,6 @@ const dropDownStyle = StyleSheet.create({
   },
 });
 
-export {
+export default {
   dropDownStyle,
 };

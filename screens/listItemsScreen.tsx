@@ -15,11 +15,13 @@ import YesNoModal from '../modals/yesNoModal';
 import SingleFieldModal from '../modals/singleFieldModal';
 import SelectModal from '../modals/selectModal';
 import { UserContext } from '../contexts/userContext';
-import { dropDownStyle } from '../Style/dropdownStyle';
+import dropDownStyle from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
 
-function ListItemsScreenComponent({ route, navigation, token, setToken }) {
+function ListItemsScreenComponent({
+  route, navigation, token, setToken,
+}) {
   const [data, setData] = React.useState([]);
   const [items, setItems] = React.useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
@@ -71,8 +73,8 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
       });
   };
 
-  const handlePutItemInList = (listId: any, selectedItem: any) => {
-    putItemInShoppingList(listId, selectedItem, token)
+  const handlePutItemInList = (thisListId: any, selectedItem: any) => {
+    putItemInShoppingList(thisListId, selectedItem, token)
       .then((json) => {
         setData(sortData([json, ...data]));
       }, () => {
@@ -131,8 +133,7 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
           <MyDropDown
             title="Menu"
             data={dropdownData}
-            styleList={dropDownStyle.list}
-            styleElements={dropDownStyle.element}
+            styleElements={dropDownStyle.dropDownStyle.element}
           />
         </View>
       ),
@@ -157,6 +158,14 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
       </View>
     </TouchableOpacity>
   );
+
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      item: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+    index: PropTypes.number.isRequired,
+  };
 
   return (
     <View>

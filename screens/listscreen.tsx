@@ -7,7 +7,7 @@ import MyButton from '../components/MyButton';
 import { listStyle } from '../Style/listStyle';
 import { homeRoute, listItemsRoute, cameraRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
-import { dropDownStyle } from '../Style/dropdownStyle';
+import dropDownStyle from '../Style/dropdownStyle';
 import { createShoppingList, getShoppingList } from '../apiCaller';
 import SingleFieldModal from '../modals/singleFieldModal';
 import YesNoModal from '../modals/yesNoModal';
@@ -65,7 +65,7 @@ function ListScreenComponent({ navigation, token, setToken }) {
   }, [navigation]);
 
   const setPP = () => {
-    console.log('set PP');
+    navigation.navigate(cameraRoute);
   };
 
   const OpenModalNewList = () => {
@@ -125,8 +125,7 @@ function ListScreenComponent({ navigation, token, setToken }) {
           <MyDropDown
             title="Menu"
             data={dropdownData}
-            styleList={dropDownStyle.list}
-            styleElements={dropDownStyle.element}
+            styleElements={dropDownStyle.dropDownStyle.element}
           />
         </View>
       ),
@@ -165,15 +164,16 @@ ListScreenComponent.propTypes = {
     addListener: PropTypes.func.isRequired,
   }).isRequired,
   token: PropTypes.string.isRequired,
+  setToken: PropTypes.func.isRequired,
 };
 
-export default function ListScreen(props) {
+export default function ListScreen({ navigation }) {
   return (
     <UserContext.Consumer>
       {
         (value) => (
           <ListScreenComponent
-            navigation={props.navigation}
+            navigation={navigation}
             token={value.token}
             setToken={value.setToken}
           />
@@ -182,3 +182,12 @@ export default function ListScreen(props) {
     </UserContext.Consumer>
   );
 }
+
+ListScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    setOptions: PropTypes.func.isRequired,
+    addListener: PropTypes.func.isRequired,
+  }).isRequired,
+};

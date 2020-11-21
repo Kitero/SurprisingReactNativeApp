@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import CameraStyle from '../Style/cameraStyle';
 import MyCamera from '../components/MyCamera';
 
-export default function CameraScreen({ navigation }) {
+export default function CameraScreen() {
   return (
     <>
       <View style={CameraStyle.containerCamera}>

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ButtonStyle } from '../Style/StyleSheet';
 
 export default function MyButton({
-  onPress, styleButton, styleText, title, disable, disableColor
+  onPress, styleButton, styleText, title, disable, disableColor,
 }) {
   let buttonStyle = styleButton;
   if (disable) {
@@ -55,7 +55,7 @@ MyButton.propTypes = {
   onPress: PropTypes.func,
   title: PropTypes.string,
   disable: PropTypes.bool,
-  disableColor: PropTypes.string
+  disableColor: PropTypes.string,
 };
 
 MyButton.defaultProps = {
@@ -64,5 +64,5 @@ MyButton.defaultProps = {
   styleText: ButtonStyle.text,
   onPress: () => { },
   disable: false,
-  disableColor: 'grey'
+  disableColor: 'grey',
 };
