@@ -4,9 +4,19 @@ import { Modal, Text, View } from 'react-native';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 
+interface IProps {
+  visible: boolean;
+  setVisible: Function;
+  title: string;
+  validateText: string;
+  rejectText: string;
+  onValidate: Function;
+  onReject: Function;
+}
+
 export default function YesNoModal({
   visible, setVisible, title, validateText, rejectText, onValidate, onReject,
-}) {
+}: IProps) {
   return (
     <Modal
       animationType="slide"

@@ -6,8 +6,16 @@ import MyErrorPrinter from '../components/MyErrorPrinter';
 import MyTextInput from '../components/MyTextInput';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 
+interface IProps {
+  visible: boolean;
+  setVisible: Function;
+  onValidate: Function;
+  placeholder: string;
+}
+
 export default function SingleFieldModal({
-  visible, setVisible, onValidate, placeholder }) {
+  visible, setVisible, onValidate, placeholder,
+}: IProps) {
   const [errors, setErrors] = React.useState([]);
   const [fieldValue, setFieldValue] = React.useState('');
   const [buttonDisable, setButtonDisable] = React.useState(true);
@@ -42,7 +50,7 @@ export default function SingleFieldModal({
             <MyTextInput
               placeholder={placeholder}
               value={fieldValue}
-              onChangeText={(text) => {
+              onChangeText={(text: string) => {
                 setFieldValue(text);
               }}
               autoFocus
@@ -72,6 +80,6 @@ SingleFieldModal.propTypes = {
 };
 
 SingleFieldModal.defaultProps = {
-  onValidate: (listName, setErrors) => { },
+  onValidate: () => { },
   placeholder: '',
 };
