@@ -5,6 +5,28 @@ import { Modal, Text, View } from 'react-native';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 
+interface IRoute {
+  params: {
+    listId: string;
+  }
+}
+
+interface IProps {
+  route: IRoute;
+  visible: boolean;
+  setVisible: Function;
+  title: string;
+  fieldName: string;
+  getElems: Function;
+  onValidate: Function;
+  onCreateNew: Function;
+}
+
+interface ElemObject {
+  name: string;
+  id: string;
+}
+
 export default function SelectModal({
   route,
   visible,
@@ -14,11 +36,9 @@ export default function SelectModal({
   getElems,
   onValidate,
   onCreateNew,
-  elemValueFieldName,
-  elemLabelFieldName,
-}) {
+}: IProps) {
   const [selectedItem, setSelectedItem] = React.useState<string | number>('');
-  const [items, setItems] = React.useState<Array<Object>>([]);
+  const [items, setItems] = React.useState<Array<ElemObject>>([]);
 
   const handleClose = () => {
     setVisible(false);
@@ -35,10 +55,10 @@ export default function SelectModal({
 
   const handleSetElems = () => {
     getElems()
-      .then((elem: Array<Object>) => {
+      .then((elem: Array<ElemObject>) => {
         setItems(elem);
         if (elem.length > 0) {
-          setSelectedItem(elem[0][elemValueFieldName]);
+          setSelectedItem(elem[0].name);
         }
       });
   };
@@ -82,9 +102,9 @@ export default function SelectModal({
                 {
                   items.map((value) => (
                     <Picker.Item
-                      key={value[elemValueFieldName]}
-                      label={value[elemLabelFieldName]}
-                      value={value[elemValueFieldName]}
+                      key={value.name}
+                      label={value.id}
+                      value={value.name}
                     />
                   ))
                 }
@@ -123,8 +143,6 @@ SelectModal.propTypes = {
   getElems: PropTypes.func.isRequired,
   onValidate: PropTypes.func,
   onCreateNew: PropTypes.func,
-  elemValueFieldName: PropTypes.string,
-  elemLabelFieldName: PropTypes.string,
 };
 
 SelectModal.defaultProps = {
@@ -132,6 +150,4 @@ SelectModal.defaultProps = {
   setVisible: () => { },
   onValidate: () => { },
   onCreateNew: () => { },
-  elemValueFieldName: 'id',
-  elemLabelFieldName: 'name',
 };
