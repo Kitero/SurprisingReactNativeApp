@@ -4,43 +4,62 @@ import PropTypes from 'prop-types';
 import boxContainer from '../Style/BoxContainerStyle';
 import MyTextInput from '../components/MyTextInput';
 import MyButton from '../components/MyButton';
+import MyErrorPrinter from '../components/MyErrorPrinter';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
+import { UserContext } from '../contexts/userContext';
 
-export default function RegisterScreen({ navigation, setToken }) {
+export default function registerScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
+  const [errors, setErrors] = React.useState([]);
+  const [buttonDisable, setButtonDisable] = React.useState(true);
 
-  function verify_passwords() {
+  const verify_passwords = () => {
     if (password1 != password2) {
-      console.log('wrong password');
+      setErrors(['Password don\'t match']);
       return false;
     }
     return true;
-  }
+  };
 
-  const createAccount = () => {
+  const createAccount = (userContext) => {
     if (!verify_passwords()) {
       return false;
     }
     signUp(username, password1)
       .then((json) => {
-        console.log(json);
-        setToken(json.token);
-        navigation.navigate(listsRoute);
+        userContext.setToken(json.token);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: listsRoute }],
+        });
+      }, (errors) => {
+        setErrors(errors);
       });
+    return true;
   };
+
+  const needDisable = () => username.length === 0
+    || password1.length === 0
+    || password2.length === 0;
+
+  React.useEffect(() => {
+    setButtonDisable(needDisable());
+  }, [username, password1, password2]);
 
   return (
     <View style={boxContainer.boxSimple}>
       <Text style={{ fontSize: 20 }}>Create your account</Text>
+      <MyErrorPrinter errors={errors} />
       <MyTextInput
         placeholder="Username"
         textContentType="username"
         value={username}
         onChangeText={(text) => { setUsername(text); }}
+        autoFocus
       />
       <MyTextInput
         placeholder="Password"
@@ -60,12 +79,17 @@ export default function RegisterScreen({ navigation, setToken }) {
         marginTop: 12,
       }}
       >
-        <MyButton
-          onPress={() => { createAccount(); }}
-          title="Create your account"
-          styleButton={ButtonStyle.button}
-          styleText={ButtonStyle.text}
-        />
+        <UserContext.Consumer>
+          {(userContext) => (
+            <MyButton
+              onPress={() => { createAccount(userContext); }}
+              title="Create your account"
+              styleButton={ButtonStyle.button}
+              styleText={ButtonStyle.text}
+              disable={buttonDisable}
+            />
+          )}
+        </UserContext.Consumer>
       </View>
     </View>
   );

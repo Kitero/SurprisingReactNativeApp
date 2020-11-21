@@ -21,7 +21,7 @@ def sign_in(request):
                                         password=request.data['password'])
         serializer = serializers.UserSerializer(query)
     except models.User.DoesNotExist:
-        return Response('Invalid username or password', status=status.HTTP_404_NOT_FOUND)
+        return Response({'details':['Invalid username or password']}, status=status.HTTP_404_NOT_FOUND)
     return Response(serializer.data)
 
 
@@ -89,3 +89,11 @@ def check_list_item(request, shopping_list_item_id):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def delete_shopping_list(request, shopping_list_id):
+    query = models.ShoppingList.objects.get(pk=shopping_list_id)
+    query.delete()
+    return Response({})

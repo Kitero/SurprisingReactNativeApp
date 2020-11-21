@@ -123,7 +123,7 @@ const modalStyle = StyleSheet.create({
   newItemModal: {
     backgroundColor: '#fff',
     width: 300,
-    height: 270,
+    minHeight: 270,
     alignItems: 'flex-end',
     borderRadius: 10,
   },
@@ -152,6 +152,17 @@ const modalStyle = StyleSheet.create({
     margin: 20,
     marginTop: 35,
   },
+  modalRejectButton: {
+    paddingTop: 8,
+    paddingLeft: 30,
+    paddingRight: 30,
+    backgroundColor: 'red',
+    borderRadius: 5,
+    borderColor: 'red',
+    height: 40,
+    margin: 20,
+    marginTop: 35,
+  },
   modalNewItemButton: {
     paddingTop: 8,
     paddingLeft: 30,
@@ -164,6 +175,7 @@ const modalStyle = StyleSheet.create({
   },
   doubleContainer: {
     alignSelf: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     padding: 15,
     paddingTop: 0,

@@ -1,66 +1,103 @@
 import * as React from 'react';
 import {
-  View, FlatList, Modal, Text,
+  View, FlatList,
 } from 'react-native';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
-import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
 import { homeRoute, listItemsRoute, cameraRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
-import MyTextInput from '../components/MyTextInput';
-import { getShoppingList } from '../apiCaller';
+import { createShoppingList, getShoppingList } from '../apiCaller';
+import SingleFieldModal from '../modals/singleFieldModal';
+import YesNoModal from '../modals/yesNoModal';
+import { UserContext } from '../contexts/userContext';
 
-export default function ListScreen({ navigation, token }) {
+const getRenderItemList = (navigation) => {
+  const renderItemList = ({ item }) => {
+    function loadListDetail(name, listId) {
+      navigation.navigate(listItemsRoute, {
+        name, listId,
+      });
+    }
+
+    return (
+      <>
+        <MyButton
+          title={item.name}
+          styleButton={listStyle.elementStyle}
+          styleText={listStyle.nameStyle}
+          onPress={() => loadListDetail(item.name, item.id)}
+        />
+      </>
+    );
+  };
+
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  };
+
+  renderItemList.defaultProps = {
+    item: {
+      name: '',
+      id: '0',
+    },
+  };
+  return renderItemList;
+};
+
+function ListScreenComponent({ navigation, token, setToken }) {
   const [dataLists, setDataLists] = React.useState([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
-  const [newItemName, setNewItemName] = React.useState('');
 
   React.useEffect(() => {
-    getShoppingList(token)
-      .then((json) => {
-        setDataLists(json);
-      });
-  }, [token]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getShoppingList(token)
+        .then((json) => {
+          setDataLists(json);
+        }, () => { });
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-  const disconnect = () => {
-    setDisconnectModalVisible(!disconnectModalVisible);
+  const setPP = () => {
+    console.log('set PP');
+  };
+
+  const OpenModalNewList = () => {
+    setNewItemModalVisible(true);
+  };
+
+  const OpenDisconnectModal = () => {
+    setDisconnectModalVisible(true);
+  };
+
+  function handleCreateShoppingList(listName, setErrors) {
+    createShoppingList(listName, token)
+      .then((json) => {
+        dataLists.push(json);
+        setDataLists(dataLists.slice());
+      }, (errors) => {
+        setErrors(errors);
+      });
+  }
+
+  function disconnect() {
+    setToken('');
     navigation.reset({
       index: 0,
       routes: [{ name: homeRoute }],
     });
-  };
-
-  const setNewID = () => {
-    if (dataLists.length == 0) {
-      return '0';
-    }
-    return (`${parseInt(dataLists[dataLists.length - 1].id, 10) + 1}`);
-  };
-
-  const saveNewData = () => {
-    console.log('Save new data');
-  };
-
-  const setPP = () => {
-    console.log('set PP');
-    navigation.navigate(cameraRoute);
-  };
-
-  const createNewList = () => {
-    console.log('create new list');
-  };
-
-  const triggerModalNewList = () => {
-    setNewItemModalVisible(!newItemModalVisible);
-  };
+  }
 
   const dropdownData = [
     {
       title: 'Create new list',
-      callBack: triggerModalNewList,
+      callBack: OpenModalNewList,
       id: '1',
     },
     {
@@ -70,12 +107,11 @@ export default function ListScreen({ navigation, token }) {
     },
     {
       title: 'Disconnect',
-      callBack: disconnect,
+      callBack: OpenDisconnectModal,
       id: '3',
     },
   ];
 
-  // Set "Create new list" and "disconnect" buttons in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -97,150 +133,52 @@ export default function ListScreen({ navigation, token }) {
     });
   }, [navigation]);
 
-  function loadListDetail(name, listId) {
-    navigation.navigate(listItemsRoute, {
-      name, listId,
-    });
-  }
-
-  const renderItemList = ({ item }) => (
-    <>
-      <MyButton
-        title={item.name}
-        styleButton={listStyle.elementStyle}
-        styleText={listStyle.nameStyle}
-        onPress={() => loadListDetail(item.name, item.id)}
-      />
-    </>
-  );
-
-  renderItemList.propTypes = {
-    item: PropTypes.shape({
-      name: PropTypes.string,
-      id: PropTypes.number,
-    }),
-  };
-  renderItemList.defaultProp = {
-    item: {
-      name: '',
-      id: '0',
-    },
-  };
-
   return (
     <View style={listStyle.listContainer}>
       <FlatList
         data={dataLists}
-        renderItem={renderItemList}
+        renderItem={getRenderItemList(navigation)}
         keyExtractor={({ id }) => String(id)}
+
       />
-      <Modal
-        animationType="slide"
-        transparent
+      <YesNoModal
         visible={disconnectModalVisible}
-      >
-        <View style={modalStyle.centerModal}>
-          <View style={modalStyle.basicModal}>
-            <MyButton
-              title="X"
-              onPress={() => {
-                setDisconnectModalVisible(!disconnectModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonClose}
-              styleText={ButtonStyle.text}
-            />
-            <Text style={textStyle.text}>
-              Disconnect?
-            </Text>
-            <View style={modalStyle.modalContainer}>
-              <MyButton
-                title="Yes"
-                onPress={() => {
-                  disconnect();
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-              <MyButton
-                title="No"
-                onPress={() => {
-                  setDisconnectModalVisible(!disconnectModalVisible);
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent
+        setVisible={setDisconnectModalVisible}
+        onValidate={disconnect}
+        title="Disconnect ?"
+      />
+      <SingleFieldModal
         visible={newItemModalVisible}
-      >
-        <View style={modalStyle.centerModal}>
-          <View style={modalStyle.basicModalNewList}>
-            <MyButton
-              title="X"
-              onPress={() => {
-                setNewItemModalVisible(!newItemModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonClose}
-              styleText={ButtonStyle.text}
-            />
-            <Text style={textStyle.text}>
-              Create new list
-            </Text>
-            <View style={modalStyle.modalContainerColumn}>
-              <MyTextInput
-                placeholder="name"
-                value={newItemName}
-                onChangeText={(text) => {
-                  setNewItemName(text);
-                }}
-              />
-              <MyButton
-                title="Create"
-                onPress={() => {
-                  fetch('http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/create-shopping-list/', {
-                    method: 'POST',
-                    headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json',
-                      token,
-                    },
-                    body: JSON.stringify({
-                      name: newItemName,
-                    }),
-                  })
-                    .then((response) => response.json())
-                    .then((json) => {
-                      console.log(json);
-                      // dataLists.push({
-                      //   name: json.name,
-                      //   id: json.id
-                      // });
-                      // setDataLists((dataLists.slice()));
-                      // setNewItemName('');
-                      // saveNewData();
-                      // setNewItemModalVisible(!newItemModalVisible);
-                    });
-                }}
-                styleButton={modalStyle.modalButton}
-                styleText={ButtonStyle.text}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+        setVisible={setNewItemModalVisible}
+        onValidate={handleCreateShoppingList}
+        placeholder="New list"
+      />
     </View>
   );
 }
 
-ListScreen.propTypes = {
+ListScreenComponent.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
+    addListener: PropTypes.func.isRequired,
   }).isRequired,
+  token: PropTypes.string.isRequired,
 };
+
+export default function ListScreen(props) {
+  return (
+    <UserContext.Consumer>
+      {
+        (value) => (
+          <ListScreenComponent
+            navigation={props.navigation}
+            token={value.token}
+            setToken={value.setToken}
+          />
+        )
+      }
+    </UserContext.Consumer>
+  );
+}

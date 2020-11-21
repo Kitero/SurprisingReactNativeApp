@@ -7,10 +7,14 @@ import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signIn } from '../apiCaller';
+import MyErrorPrinter from '../components/MyErrorPrinter';
+import { UserContext } from '../contexts/userContext';
 
-export default function LoginScreen({ navigation, setToken }) {
+export default function loginScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [buttonDisable, setButtonDisable] = React.useState(true);
+  const [errors, setErrors] = React.useState([]);
 
   function handleUsernameChange(text) {
     setUsername(text);
@@ -20,22 +24,34 @@ export default function LoginScreen({ navigation, setToken }) {
     setPassword(text);
   }
 
-  function loginAccount() {
+  function loginAccount(uesrContext) {
     signIn(username, password)
       .then((json) => {
-        console.log(json);
-        setToken(json.token);
-        navigation.navigate(listsRoute);
+        uesrContext.setToken(json.token);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: listsRoute }],
+        });
+      }, (errors) => {
+        setErrors(errors);
       });
   }
+
+  const needDisable = () => username.length === 0 || password.length === 0;
+
+  React.useEffect(() => {
+    setButtonDisable(needDisable());
+  }, [username, password]);
 
   return (
     <View style={boxContainer.boxSimple}>
       <Text style={{ fontSize: 20 }}>Connect to your account</Text>
+      <MyErrorPrinter errors={errors} />
       <MyTextInput
         placeholder="Username"
         value={username}
         onChangeText={handleUsernameChange}
+        autoFocus
       />
       <MyTextInput
         placeholder="Password"
@@ -43,23 +59,24 @@ export default function LoginScreen({ navigation, setToken }) {
         value={password}
         onChangeText={handlePasswordChange}
       />
-      <View style={{
-        marginTop: 12,
-      }}
+      <View
+        style={{
+          marginTop: 12,
+        }}
       >
-        <MyButton
-          title="Validate login"
-          color="#00b70e"
-          onPress={() => {
-            loginAccount();
-            // navigation.reset({
-            //   index: 0,
-            //   routes: [{ name: listsRoute }],
-            // });
-          }}
-          styleButton={ButtonStyle.button}
-          styleText={ButtonStyle.text}
-        />
+        <UserContext.Consumer>
+          {(value) => (
+            <MyButton
+              title="Validate login"
+              onPress={() => {
+                loginAccount(value);
+              }}
+              styleButton={ButtonStyle.button}
+              styleText={ButtonStyle.text}
+              disable={buttonDisable}
+            />
+          )}
+        </UserContext.Consumer>
       </View>
     </View>
   );
