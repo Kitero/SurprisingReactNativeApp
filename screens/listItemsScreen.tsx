@@ -18,6 +18,7 @@ import { UserContext } from '../contexts/userContext';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
+import { IListItem, IItem } from '../interfaces/api';
 
 interface IRoute {
   params: {
@@ -25,23 +26,33 @@ interface IRoute {
   }
 }
 
-interface IProps {
+interface INavigation {
+  reset: Function;
+  goBack: Function;
+  navigate: Function;
+  setOptions: Function;
+}
+
+interface IScreenProps {
   route: IRoute;
-  navigation: object;
+  navigation: INavigation;
+}
+
+interface IProps extends IScreenProps {
   token: string;
   setToken: Function;
 }
 
-interface IData {
-  checked: boolean;
-  name: string;
+interface IItemProps {
+  item: IListItem;
+  index: number;
 }
 
 function ListItemsScreenComponent({
   route, navigation, token, setToken,
 }: IProps) {
-  const [data, setData] = React.useState<Array<IData>>([]);
-  const [items, setItems] = React.useState([]);
+  const [data, setData] = React.useState<IListItem[]>([]);
+  const [items, setItems] = React.useState<IItem[]>([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
@@ -49,12 +60,12 @@ function ListItemsScreenComponent({
   const { listId } = route.params;
 
   const compareItems = (
-    item1: { checked: boolean; name: string }, item2: IData,
+    item1: { checked: boolean; name: string }, item2: IListItem,
   ) => ((
     (item1.checked && (!item2.checked || item1.name > item2.name))
     || (!item1.checked && !item2.checked && item1.name > item2.name)) ? 1 : -1);
 
-  const sortData = (arr: Array<IData> = data) => arr.sort(compareItems);
+  const sortData = (arr: Array<IListItem> = data) => arr.sort(compareItems);
 
   React.useEffect(() => {
     getShoppingListItems(listId, token)
@@ -91,7 +102,7 @@ function ListItemsScreenComponent({
       });
   };
 
-  const handlePutItemInList = (listId: any, selectedItem: any) => {
+  const handlePutItemInList = (selectedItem: string) => {
     putItemInShoppingList(listId, selectedItem, token)
       .then((json) => {
         setData(sortData([json, ...data]));
@@ -159,9 +170,9 @@ function ListItemsScreenComponent({
     });
   }, [navigation]);
 
-  const renderItemList = ({ item, index }) => (
+  const renderItemList = ({ item, index }: IItemProps) => (
     <TouchableOpacity onPress={() => {
-      checkShippingListItem(item.id, token)
+      checkShippingListItem(String(item.id), token)
         .then((json) => {
           data[index].checked = json.checked;
           setData(sortData().slice());
@@ -178,12 +189,19 @@ function ListItemsScreenComponent({
     </TouchableOpacity>
   );
 
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      id: PropTypes.string,
+      item: PropTypes.string,
+    }).isRequired,
+  };
+
   return (
     <View>
       <FlatList
         data={data}
         renderItem={renderItemList}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={({ id }) => String(id)}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }
@@ -237,11 +255,18 @@ ListItemsScreenComponent.propTypes = {
   setToken: PropTypes.func.isRequired,
 };
 
-export default function ListItemsScreen(props) {
+export default function ListItemsScreen({ navigation, route }: IScreenProps) {
   return (
     <UserContext.Consumer>
       {
-        (value) => (<ListItemsScreenComponent {...props} {...value} />)
+        ({ token, setToken }) => (
+          <ListItemsScreenComponent
+            navigation={navigation}
+            route={route}
+            token={token}
+            setToken={setToken}
+          />
+        )
       }
     </UserContext.Consumer>
   );

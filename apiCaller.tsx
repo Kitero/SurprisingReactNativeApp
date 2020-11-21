@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { IListItem, IItem } from './interfaces/api';
 
 const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
 
@@ -8,7 +9,7 @@ interface IRequestOptions {
   body?: string;
 }
 
-function fetchApi(path: string, method: string, headers = {}, data = {}) {
+function fetchApi<T>(path: string, method: string, headers = {}, data = {}) {
   const requestOption: IRequestOptions = {
     method,
     headers: {
@@ -20,7 +21,7 @@ function fetchApi(path: string, method: string, headers = {}, data = {}) {
   if (method !== 'GET' && method !== 'HEAD') {
     requestOption.body = JSON.stringify(data);
   }
-  return new Promise((resolve, reject) => {
+  return new Promise<T>((resolve, reject) => {
     fetch(apiUrl + path, requestOption)
       .then((response) => {
         if (response.ok) {
@@ -52,7 +53,7 @@ function signIn(username: string, password: string) {
   });
 }
 
-function createItem(itemName: string, token: string) {
+function createItem(itemName: string, token: string): Promise<IItem> {
   return fetchApi('create-item/', 'POST', { token }, { name: itemName });
 }
 
@@ -68,18 +69,19 @@ function getShoppingList(token: string) {
   return fetchApi('get-shopping-lists/', 'GET', { token });
 }
 
-function putItemInShoppingList(shoppingListId: string, itemId: string, token: string) {
+function putItemInShoppingList(shoppingListId: string,
+  itemId: string, token: string): Promise<IListItem> {
   return fetchApi('put-item-in-shopping-list/', 'POST', { token }, {
     shopping_list: shoppingListId,
     item: itemId,
   });
 }
 
-function getShoppingListItems(listId: string, token: string) {
+function getShoppingListItems(listId: string, token: string): Promise<IListItem[]> {
   return fetchApi(`get-items-from-shopping-list/${listId}/`, 'GET', { token });
 }
 
-function checkShippingListItem(shoppingListItemId: string, token: string) {
+function checkShippingListItem(shoppingListItemId: string, token: string): Promise<IListItem> {
   return fetchApi(`check-shopping-list-item/${shoppingListItemId}/`, 'GET', { token });
 }
 
