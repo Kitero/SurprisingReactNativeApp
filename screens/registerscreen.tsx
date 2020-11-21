@@ -8,15 +8,14 @@ import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
 
-
-export default function registerScreen({ navigation, setToken }) {
+export default function RegisterScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
 
   function verify_passwords() {
     if (password1 != password2) {
-      console.log("wrong password");
+      console.log('wrong password');
       return false;
     }
     return true;
@@ -32,7 +31,7 @@ export default function registerScreen({ navigation, setToken }) {
         setToken(json.token);
         navigation.navigate(listsRoute);
       });
-  }
+  };
 
   return (
     <View style={boxContainer.boxSimple}>
@@ -72,7 +71,7 @@ export default function registerScreen({ navigation, setToken }) {
   );
 }
 
-registerScreen.propTypes = {
+RegisterScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,

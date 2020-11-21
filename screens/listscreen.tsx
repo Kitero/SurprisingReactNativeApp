@@ -6,13 +6,13 @@ import PropTypes, { string } from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
-import { homeRoute, listItemsRoute } from '../routes';
+import { homeRoute, listItemsRoute, cameraRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyTextInput from '../components/MyTextInput';
 import { getShoppingList } from '../apiCaller';
 
-export default function listScreen({ navigation, token }) {
+export default function ListScreen({ navigation, token }) {
   const [dataLists, setDataLists] = React.useState([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
@@ -31,30 +31,31 @@ export default function listScreen({ navigation, token }) {
       index: 0,
       routes: [{ name: homeRoute }],
     });
-  }
+  };
 
   const setNewID = () => {
     if (dataLists.length == 0) {
       return '0';
     }
-    return ('' + (parseInt(dataLists[dataLists.length - 1].id, 10) + 1));
-  }
+    return (`${parseInt(dataLists[dataLists.length - 1].id, 10) + 1}`);
+  };
 
   const saveNewData = () => {
     console.log('Save new data');
-  }
+  };
 
   const setPP = () => {
     console.log('set PP');
-  }
+    navigation.navigate(cameraRoute);
+  };
 
   const createNewList = () => {
-    console.log("create new list");
-  }
+    console.log('create new list');
+  };
 
   const triggerModalNewList = () => {
     setNewItemModalVisible(!newItemModalVisible);
-  }
+  };
 
   const dropdownData = [
     {
@@ -98,7 +99,7 @@ export default function listScreen({ navigation, token }) {
 
   function loadListDetail(name, listId) {
     navigation.navigate(listItemsRoute, {
-      name, listId
+      name, listId,
     });
   }
 
@@ -192,12 +193,12 @@ export default function listScreen({ navigation, token }) {
             </Text>
             <View style={modalStyle.modalContainerColumn}>
               <MyTextInput
-                placeholder={"name"}
+                placeholder="name"
                 value={newItemName}
                 onChangeText={(text) => {
-                  setNewItemName(text)
-                }}>
-              </MyTextInput>
+                  setNewItemName(text);
+                }}
+              />
               <MyButton
                 title="Create"
                 onPress={() => {
@@ -206,11 +207,11 @@ export default function listScreen({ navigation, token }) {
                     headers: {
                       Accept: 'application/json',
                       'Content-Type': 'application/json',
-                      token: token
+                      token,
                     },
                     body: JSON.stringify({
-                      name: newItemName
-                    })
+                      name: newItemName,
+                    }),
                   })
                     .then((response) => response.json())
                     .then((json) => {
@@ -223,7 +224,7 @@ export default function listScreen({ navigation, token }) {
                       // setNewItemName('');
                       // saveNewData();
                       // setNewItemModalVisible(!newItemModalVisible);
-                    })
+                    });
                 }}
                 styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}
@@ -236,7 +237,7 @@ export default function listScreen({ navigation, token }) {
   );
 }
 
-listScreen.propTypes = {
+ListScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,

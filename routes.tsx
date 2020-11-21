@@ -4,6 +4,7 @@ const homeRoute = "homePage"
 const listsRoute = "lists"
 const listItemsRoute = "listItems"
 const disconnectRoute = "disconnect"
+const cameraRoute = "camera"
 
 export {
   loginRoute,
@@ -12,4 +13,5 @@ export {
   listsRoute,
   listItemsRoute,
   disconnectRoute,
+  cameraRoute,
 }

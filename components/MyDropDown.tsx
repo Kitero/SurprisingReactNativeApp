@@ -9,7 +9,6 @@ import {
 import PropTypes from 'prop-types';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyButton from './MyButton';
-import { modalStyle } from '../Style/StyleSheet';
 
 export default function MyDropDown({
   styleList, styleElements, data, title,
@@ -24,7 +23,7 @@ export default function MyDropDown({
       }}
       style={styleElements}
     >
-      <Text style={{textAlign: 'center'}}>
+      <Text style={{ textAlign: 'center' }}>
         {item.title}
       </Text>
     </TouchableOpacity>
@@ -49,8 +48,8 @@ export default function MyDropDown({
           onPress={() => {
             setIsVisible(!isVisible);
           }}
-          style={{flex: 1, width: 'auto'}}>
-        </TouchableOpacity>
+          style={{ flex: 1, width: 'auto' }}
+        />
         <View style={dropDownStyle.list}>
           <FlatList
             data={data}

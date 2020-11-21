@@ -8,8 +8,7 @@ import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signIn } from '../apiCaller';
 
-
-export default function loginScreen({ navigation, setToken }) {
+export default function LoginScreen({ navigation, setToken }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -66,7 +65,7 @@ export default function loginScreen({ navigation, setToken }) {
   );
 }
 
-loginScreen.propTypes = {
+LoginScreen.propTypes = {
   navigation: PropTypes.shape({
     reset: PropTypes.func.isRequired,
   }).isRequired,

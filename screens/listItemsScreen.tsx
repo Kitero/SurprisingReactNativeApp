@@ -3,21 +3,25 @@ import {
   View,
   Text,
   FlatList,
-  Modal
+  Modal,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native-gesture-handler';
+import CheckBox from '@react-native-community/checkbox';
+import { Picker } from '@react-native-community/picker';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import MyTextInput from '../components/MyTextInput';
-import CheckBox from '@react-native-community/checkbox';
-import { checkShippingListItem, createItem, getItems, getShoppingListItems, putItemInShoppingList } from '../apiCaller';
-import { Picker } from '@react-native-community/picker';
+import {
+  checkShippingListItem, createItem, getItems, getShoppingListItems, putItemInShoppingList,
+} from '../apiCaller';
+import { dropDownStyle } from '../Style/dropdownStyle';
+import MyDropDown from '../components/MyDropDown';
+import { cameraRoute, homeRoute } from '../routes';
 
-export default function listItemsScreen({ route, navigation, token }) {
+export default function ListItemsScreen({ route, navigation, token }) {
   const { name } = route.params;
-
   const [data, setData] = React.useState([]);
   const [items, setItems] = React.useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
@@ -33,13 +37,13 @@ export default function listItemsScreen({ route, navigation, token }) {
     getItems(token)
       .then((json) => {
         setItems(json);
-      })
+      });
     getShoppingListItems(route.params.listId, token)
       .then((json) => {
         console.log(json);
         setData(json);
       });
-  }, [token, route])
+  }, [token, route]);
 
   function disconnect() {
     setDisconnectModalVisible(!disconnectModalVisible);
@@ -56,7 +60,40 @@ export default function listItemsScreen({ route, navigation, token }) {
     console.log('Save new data');
   };
 
-  // Set "disconnect" buttons in the top bar
+  const setPP = () => {
+    console.log('set PP');
+    navigation.navigate(cameraRoute);
+  };
+
+  const dropdownData = [
+    {
+      title: 'Create new item',
+      callBack: () => {
+        setNewItemModalVisible(!newItemModalVisible);
+      },
+      id: '1',
+    },
+    {
+      title: 'Set profil picture',
+      callBack: setPP,
+      id: '2',
+    },
+    {
+      title: 'Delete this list',
+      callBack: () => {
+        setDeleteModalVisible(!deleteModalVisible);
+        console.log(newItemModalVisible);
+      },
+      id: '3',
+    },
+    {
+      title: 'Disconnect',
+      callBack: disconnect,
+      id: '4',
+    },
+  ];
+
+  // Set Menu button in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -67,13 +104,11 @@ export default function listItemsScreen({ route, navigation, token }) {
             flexDirection: 'row',
           }}
         >
-          <MyButton
-            title="Disconnect"
-            onPress={() => {
-              setDisconnectModalVisible(!disconnectModalVisible);
-            }}
-            styleButton={ButtonStyle.buttonDisconnect}
-            styleText={ButtonStyle.text}
+          <MyDropDown
+            title="Menu"
+            data={dropdownData}
+            styleList={dropDownStyle.list}
+            styleElements={dropDownStyle.element}
           />
         </View>
       ),
@@ -92,6 +127,9 @@ export default function listItemsScreen({ route, navigation, token }) {
               data[index].quantity = parseInt(value, 10);
               setData(data.slice());
               saveNewData();
+            }}
+            onEndEditing={() => {
+
             }}
           />
         </View>
@@ -115,7 +153,7 @@ export default function listItemsScreen({ route, navigation, token }) {
                   data[index].checked = json.checked;
                 });
             }}
-            tintColors={{ true: "white", false: "white" }}
+            tintColors={{ true: 'white', false: 'white' }}
             style={itemsStyle.checkbox}
           />
         </View>
@@ -132,28 +170,7 @@ export default function listItemsScreen({ route, navigation, token }) {
       <FlatList
         data={data}
         renderItem={renderItemList}
-        keyExtractor={(item) => {
-          return String(item.id);
-        }}
-        ListHeaderComponent={(
-          <>
-            <MyButton
-              title="Delete list"
-              onPress={() => {
-                setDeleteModalVisible(!deleteModalVisible);
-                console.log(newItemModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonDelete}
-              styleText={ButtonStyle.text}
-            />
-            <MyButton
-              title="Add item"
-              onPress={() => { setNewItemModalVisible(!newItemModalVisible); }}
-              styleButton={ButtonStyle.buttonNewItem}
-              styleText={ButtonStyle.text}
-            />
-          </>
-        )}
+        keyExtractor={(item) => item.id}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }
@@ -180,7 +197,11 @@ export default function listItemsScreen({ route, navigation, token }) {
               <MyButton
                 title="Yes"
                 onPress={() => {
-                  disconnect();
+                  // disconnect user
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: homeRoute }],
+                  });
                 }}
                 styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}
@@ -264,7 +285,7 @@ export default function listItemsScreen({ route, navigation, token }) {
                 <Picker
                   selectedValue={selectedItem}
                   onValueChange={(itemValue, itemIndex) => {
-                    if (itemValue == "-1") {
+                    if (itemValue == '-1') {
                       console.log('Create new');
                       setCreateItemModalVisible(true);
                     } else {
@@ -313,7 +334,7 @@ export default function listItemsScreen({ route, navigation, token }) {
             <Text style={textStyle.text}>
               Create new item
             </Text>
-            <View style={{ ...modalStyle.modalContainerColumn, justifyContent: "space-around", height: "50%" }}>
+            <View style={{ ...modalStyle.modalContainerColumn, justifyContent: 'space-around', height: '50%' }}>
               <MyTextInput
                 placeholder="Item name..."
                 value={newItem}
@@ -328,7 +349,7 @@ export default function listItemsScreen({ route, navigation, token }) {
                       setCreateItemModalVisible(false);
                       items.push(json);
                       setItems(items.slice());
-                    })
+                    });
                 }}
                 styleText={ButtonStyle.text}
               />
@@ -340,7 +361,7 @@ export default function listItemsScreen({ route, navigation, token }) {
   );
 }
 
-listItemsScreen.propTypes = {
+ListItemsScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
