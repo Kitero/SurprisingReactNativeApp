@@ -12,6 +12,9 @@ import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import MyTextInput from '../components/MyTextInput';
+import { dropDownStyle } from '../Style/dropdownStyle';
+import MyDropDown from '../components/MyDropDown';
+import { cameraRoute, homeRoute } from '../routes';
 
 export default function listItemsScreen({ route, navigation }) {
   const { name } = route.params;
@@ -90,7 +93,40 @@ export default function listItemsScreen({ route, navigation }) {
     console.log('Save new data');
   };
 
-  // Set "disconnect" buttons in the top bar
+  const setPP = () => {
+    console.log('set PP');
+    navigation.navigate(cameraRoute);
+  }
+
+  const dropdownData = [
+    {
+      title: 'Create new item',
+      callBack: () => {
+        setNewItemModalVisible(!newItemModalVisible);
+      },
+      id: '1',
+    },
+    {
+      title: 'Set profil picture',
+      callBack: setPP,
+      id: '2',
+    },
+    {
+      title: 'Delete this list',
+      callBack: () => {
+        setDeleteModalVisible(!deleteModalVisible);
+        console.log(newItemModalVisible);
+      },
+      id: '3',
+    },
+    {
+      title: 'Disconnect',
+      callBack: disconnect,
+      id: '4',
+    },
+  ];
+
+  // Set Menu button in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -101,13 +137,11 @@ export default function listItemsScreen({ route, navigation }) {
             flexDirection: 'row',
           }}
         >
-          <MyButton
-            title="Disconnect"
-            onPress={() => {
-              setDisconnectModalVisible(!disconnectModalVisible);
-            }}
-            styleButton={ButtonStyle.buttonDisconnect}
-            styleText={ButtonStyle.text}
+          <MyDropDown
+            title="Menu"
+            data={dropdownData}
+            styleList={dropDownStyle.list}
+            styleElements={dropDownStyle.element}
           />
         </View>
       ),
@@ -177,25 +211,6 @@ export default function listItemsScreen({ route, navigation }) {
         data={data}
         renderItem={renderItemList}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={(
-          <>
-            <MyButton
-              title="Delete list"
-              onPress={() => {
-                setDeleteModalVisible(!deleteModalVisible);
-                console.log(newItemModalVisible);
-              }}
-              styleButton={ButtonStyle.buttonDelete}
-              styleText={ButtonStyle.text}
-            />
-            <MyButton
-              title="Create a new item"
-              onPress={() => { setNewItemModalVisible(!newItemModalVisible); }}
-              styleButton={ButtonStyle.buttonNewItem}
-              styleText={ButtonStyle.text}
-            />
-          </>
-        )}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }
@@ -222,7 +237,11 @@ export default function listItemsScreen({ route, navigation }) {
               <MyButton
                 title="Yes"
                 onPress={() => {
-                  disconnect();
+                  // disconnect user
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: homeRoute }],
+                  });
                 }}
                 styleButton={modalStyle.modalButton}
                 styleText={ButtonStyle.text}
