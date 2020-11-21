@@ -41,7 +41,7 @@ export default function SelectModal({
           setSelectedItem(elem[0][elemValueFieldName]);
         }
       });
-  }, [title, fieldName, getElems, elemValueFieldName, elemLabelFieldName]);
+  }, []);
 
   return (
     <Modal
@@ -71,6 +71,7 @@ export default function SelectModal({
               <Picker
                 selectedValue={selectedItem}
                 onValueChange={handleSelectedItemChange}
+                mode="dropdown"
               >
                 {
                   items.map((value) => (

@@ -5,7 +5,7 @@ import {
   FlatList,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
@@ -82,14 +82,6 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
 
   const openCreateNewItemModal = () => {
     setCreateItemModalVisible(true);
-  };
-
-  const handleCheckItem = (item: { id: any; }, index: string | number) => {
-    checkShippingListItem(item.id, token)
-      .then((json) => {
-        data[index].checked = json.checked;
-        setData(sortData().slice());
-      }, () => { });
   };
 
   React.useLayoutEffect(() => {

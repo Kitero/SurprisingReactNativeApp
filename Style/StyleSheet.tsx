@@ -123,7 +123,7 @@ const modalStyle = StyleSheet.create({
   newItemModal: {
     backgroundColor: '#fff',
     width: 300,
-    height: 270,
+    minHeight: 270,
     alignItems: 'flex-end',
     borderRadius: 10,
   },
@@ -175,6 +175,7 @@ const modalStyle = StyleSheet.create({
   },
   doubleContainer: {
     alignSelf: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     padding: 15,
     paddingTop: 0,

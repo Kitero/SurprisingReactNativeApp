@@ -20,9 +20,9 @@ function fetchApi(path, method, headers = {}, data = {}) {
         if (response.ok) {
           response.json().then((json) => { resolve(json); });
         } else {
-          response.json().then((json) => {
+          response.json().then((json: Object) => {
             let errors: any[] = [];
-            json.values().forEach((e) => {
+            Object.values(json).forEach((e) => {
               errors = errors.concat(e);
             });
             reject(errors);
