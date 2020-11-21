@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+interface IUserContext {
+  token: string;
+  setToken: Function;
+}
 
 const UserContext = React.createContext({
-    token: '',
-    setToken: (value) => { }
+  token: '',
+  setToken: () => { },
 });
 
 export {
-    UserContext
-}
+  IUserContext,
+  UserContext,
+};

@@ -8,13 +8,18 @@ import MyErrorPrinter from '../components/MyErrorPrinter';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
-import { UserContext } from '../contexts/userContext';
+import { IUserContext, UserContext } from '../contexts/userContext';
+import { INavigation } from '../interfaces/navigation';
 
-export default function RegisterScreen({ navigation }) {
+interface IProps {
+  navigation: INavigation
+}
+
+export default function RegisterScreen({ navigation }: IProps) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
-  const [errors, setErrors] = React.useState([]);
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [buttonDisable, setButtonDisable] = React.useState(true);
 
   const verifyPasswords = () => {
@@ -25,7 +30,7 @@ export default function RegisterScreen({ navigation }) {
     return true;
   };
 
-  const createAccount = (userContext) => {
+  const createAccount = (userContext: IUserContext) => {
     if (!verifyPasswords()) {
       return false;
     }

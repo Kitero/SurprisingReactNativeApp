@@ -10,7 +10,18 @@ interface IItem {
   id: string;
 }
 
+interface IList {
+  name: string;
+  id: string;
+}
+
+interface IUser {
+  token: string;
+}
+
 export {
   IListItem,
   IItem,
+  IList,
+  IUser,
 };

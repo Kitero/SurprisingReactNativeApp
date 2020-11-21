@@ -18,9 +18,9 @@ export default function MyCamera() {
 
   const [spinner, setSpinner] = useState(false);
 
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useState<boolean>();
   const [type, setType] = useState(Camera.Constants.Type.front);
-  const [camera, setCamera] = useState(null);
+  const [camera, setCamera] = useState<Camera | null>();
 
   const [cameraDisplay, setCameraDisplay] = useState(true);
   const [photo, setPhoto] = useState({ uri: 'file:///data/' });
@@ -40,19 +40,19 @@ export default function MyCamera() {
 
       const distances = {};
       const realRatios = {};
-      let minDistance = null;
-      for (const ratioCam of ratios) {
+      let minDistance: string;
+      ratios.forEach((ratioCam: string) => {
         const parts = ratioCam.split(':');
         const realRatio = parseInt(parts[0], 10) / parseInt(parts[1], 10);
         realRatios[ratioCam] = realRatio;
         const distance = screenRatio - realRatio;
         distances[ratioCam] = realRatio;
-        if (minDistance == null) {
+        if (minDistance === undefined) {
           minDistance = ratioCam;
         } else if (distance >= 0 && distance < distances[minDistance]) {
           minDistance = ratioCam;
         }
-      }
+      });
       desiredRatio = minDistance;
       const remainder = Math.floor(
         (height - realRatios[desiredRatio] * width) / 2,
@@ -76,7 +76,7 @@ export default function MyCamera() {
     })();
   }, []);
 
-  if (hasPermission === null) {
+  if (hasPermission === undefined) {
     return <View />;
   }
   if (hasPermission === false) {

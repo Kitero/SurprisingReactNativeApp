@@ -8,26 +8,31 @@ import { ButtonStyle } from '../Style/StyleSheet';
 import { listsRoute } from '../routes';
 import { signIn } from '../apiCaller';
 import MyErrorPrinter from '../components/MyErrorPrinter';
-import { UserContext } from '../contexts/userContext';
+import { IUserContext, UserContext } from '../contexts/userContext';
+import { INavigation } from '../interfaces/navigation';
 
-export default function LoginScreen({ navigation }) {
+interface IProps {
+  navigation: INavigation;
+}
+
+export default function LoginScreen({ navigation }: IProps) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [buttonDisable, setButtonDisable] = React.useState(true);
   const [errors, setErrors] = React.useState([]);
 
-  function handleUsernameChange(text) {
+  function handleUsernameChange(text: string) {
     setUsername(text);
   }
 
-  function handlePasswordChange(text) {
+  function handlePasswordChange(text: string) {
     setPassword(text);
   }
 
-  function loginAccount(uesrContext) {
+  function loginAccount(userContext: IUserContext) {
     signIn(username, password)
       .then((json) => {
-        uesrContext.setToken(json.token);
+        userContext.setToken(json.token);
         navigation.reset({
           index: 0,
           routes: [{ name: listsRoute }],

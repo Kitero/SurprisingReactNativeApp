@@ -19,19 +19,7 @@ import dropDownStyle from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
 import { IListItem, IItem } from '../interfaces/api';
-
-interface IRoute {
-  params: {
-    listId: string;
-  }
-}
-
-interface INavigation {
-  reset: Function;
-  goBack: Function;
-  navigate: Function;
-  setOptions: Function;
-}
+import { INavigation, IRoute } from '../interfaces/navigation';
 
 interface IScreenProps {
   route: IRoute;

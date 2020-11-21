@@ -12,10 +12,16 @@ import { createShoppingList, getShoppingList } from '../apiCaller';
 import SingleFieldModal from '../modals/singleFieldModal';
 import YesNoModal from '../modals/yesNoModal';
 import { UserContext } from '../contexts/userContext';
+import { INavigation } from '../interfaces/navigation';
+import { IList } from '../interfaces/api';
 
-const getRenderItemList = (navigation) => {
-  const renderItemList = ({ item }) => {
-    function loadListDetail(name, listId) {
+interface IItemProps {
+  item: IList;
+}
+
+const getRenderItemList = (navigation: INavigation) => {
+  const renderItemList = ({ item }: IItemProps) => {
+    function loadListDetail(name: string, listId: string) {
       navigation.navigate(listItemsRoute, {
         name, listId,
       });
@@ -49,8 +55,17 @@ const getRenderItemList = (navigation) => {
   return renderItemList;
 };
 
-function ListScreenComponent({ navigation, token, setToken }) {
-  const [dataLists, setDataLists] = React.useState([]);
+interface IScreenProps {
+  navigation: INavigation;
+}
+
+interface IProps extends IScreenProps {
+  token: string;
+  setToken: Function;
+}
+
+function ListScreenComponent({ navigation, token, setToken }: IProps) {
+  const [dataLists, setDataLists] = React.useState<IList[]>([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
 
@@ -76,7 +91,7 @@ function ListScreenComponent({ navigation, token, setToken }) {
     setDisconnectModalVisible(true);
   };
 
-  function handleCreateShoppingList(listName, setErrors) {
+  function handleCreateShoppingList(listName: string, setErrors: Function) {
     createShoppingList(listName, token)
       .then((json) => {
         dataLists.push(json);
@@ -167,7 +182,7 @@ ListScreenComponent.propTypes = {
   setToken: PropTypes.func.isRequired,
 };
 
-export default function ListScreen({ navigation }) {
+export default function ListScreen({ navigation }: IScreenProps) {
   return (
     <UserContext.Consumer>
       {

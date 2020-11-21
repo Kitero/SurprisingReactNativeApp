@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
-import { IListItem, IItem } from './interfaces/api';
+import {
+  IListItem, IItem, IList, IUser,
+} from './interfaces/api';
 
 const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
 
@@ -39,14 +41,14 @@ function fetchApi<T>(path: string, method: string, headers = {}, data = {}) {
   });
 }
 
-function signUp(username: string, password: string) {
+function signUp(username: string, password: string): Promise<IUser> {
   return fetchApi('sign-up/', 'POST', {}, {
     username,
     password,
   });
 }
 
-function signIn(username: string, password: string) {
+function signIn(username: string, password: string): Promise<IUser> {
   return fetchApi('sign-in/', 'POST', {}, {
     username,
     password,
@@ -61,11 +63,11 @@ function getItems(token: string) {
   return fetchApi('get-items/', 'GET', { token });
 }
 
-function createShoppingList(shoppingListName: string, token: string) {
+function createShoppingList(shoppingListName: string, token: string): Promise<IList> {
   return fetchApi('create-shopping-list/', 'POST', { token }, { name: shoppingListName });
 }
 
-function getShoppingList(token: string) {
+function getShoppingList(token: string): Promise<IList[]> {
   return fetchApi('get-shopping-lists/', 'GET', { token });
 }
 

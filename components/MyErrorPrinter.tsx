@@ -3,22 +3,26 @@ import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 import ErrorPrinterStyle from '../Style/ErrorPrinterStyle';
 
-export default function MyErrorPrinter({ errors }) {
+interface IProps {
+  errors: string[];
+}
+
+export default function MyErrorPrinter({ errors }: IProps) {
   return (
     <View style={ErrorPrinterStyle.container}>
       {
-                errors.length
-                  ? errors.map((e, index) => (
-                    <Text key={index} style={ErrorPrinterStyle.text}>
-                      {e}
-                    </Text>
-                  ))
-                  : <></>
-            }
+        errors.length
+          ? errors.map((e) => (
+            <Text key={e} style={ErrorPrinterStyle.text}>
+              {e}
+            </Text>
+          ))
+          : <></>
+      }
     </View>
   );
 }
 
 MyErrorPrinter.propTypes = {
-  errors: PropTypes.array.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

@@ -1,10 +1,10 @@
-const loginRoute = "login"
-const registerRoute = "register"
-const homeRoute = "homePage"
-const listsRoute = "lists"
-const listItemsRoute = "listItems"
-const disconnectRoute = "disconnect"
-const cameraRoute = "camera"
+const loginRoute = 'login';
+const registerRoute = 'register';
+const homeRoute = 'homePage';
+const listsRoute = 'lists';
+const listItemsRoute = 'listItems';
+const disconnectRoute = 'disconnect';
+const cameraRoute = 'camera';
 
 export {
   loginRoute,
@@ -14,4 +14,4 @@ export {
   listItemsRoute,
   disconnectRoute,
   cameraRoute,
-}
+};
