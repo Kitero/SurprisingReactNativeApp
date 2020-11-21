@@ -14,8 +14,8 @@ export default function MyButton({
   if (disable) {
     buttonStyle = {
       ...buttonStyle,
-      backgroundColor: disableColor
-    }
+      backgroundColor: disableColor,
+    };
   }
   return (
     <TouchableOpacity

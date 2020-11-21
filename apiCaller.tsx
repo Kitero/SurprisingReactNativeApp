@@ -78,7 +78,7 @@ function checkShippingListItem(shoppingListItemId, token) {
 }
 
 function deleteShoppingList(shoppingListId, token) {
-  return fetchApi(`delete-shopping-list/${shoppingListId}`, 'GET', { token });
+  return fetchApi(`delete-shopping-list/${shoppingListId}/`, 'GET', { token });
 }
 
 export {

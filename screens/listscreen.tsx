@@ -142,6 +142,7 @@ function ListScreenComponent({ navigation, token, setToken }) {
         visible={disconnectModalVisible}
         setVisible={setDisconnectModalVisible}
         onValidate={disconnect}
+        title="Disconnect ?"
       />
       <SingleFieldModal
         visible={newItemModalVisible}
