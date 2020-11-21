@@ -10,7 +10,7 @@ import { signIn } from '../apiCaller';
 import MyErrorPrinter from '../components/MyErrorPrinter';
 import { UserContext } from '../contexts/userContext';
 
-export default function loginScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [buttonDisable, setButtonDisable] = React.useState(true);

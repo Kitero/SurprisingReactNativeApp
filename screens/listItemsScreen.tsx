@@ -6,8 +6,6 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MyButton from '../components/MyButton';
-import { ButtonStyle } from '../Style/StyleSheet';
 import { itemsStyle } from '../Style/listStyle';
 import {
   checkShippingListItem, createItem, deleteShoppingList, getItems,
@@ -16,7 +14,6 @@ import {
 import YesNoModal from '../modals/yesNoModal';
 import SingleFieldModal from '../modals/singleFieldModal';
 import SelectModal from '../modals/selectModal';
-import { homeRoute } from '../routes';
 import { UserContext } from '../contexts/userContext';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
@@ -88,7 +85,6 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
   };
 
   const setPP = () => {
-    console.log('set PP');
     navigation.navigate(cameraRoute);
   };
 
@@ -167,7 +163,7 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
       <FlatList
         data={data}
         renderItem={renderItemList}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }

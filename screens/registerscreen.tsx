@@ -10,15 +10,15 @@ import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
 import { UserContext } from '../contexts/userContext';
 
-export default function registerScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
   const [errors, setErrors] = React.useState([]);
   const [buttonDisable, setButtonDisable] = React.useState(true);
 
-  const verify_passwords = () => {
-    if (password1 != password2) {
+  const verifyPasswords = () => {
+    if (password1 !== password2) {
       setErrors(['Password don\'t match']);
       return false;
     }
@@ -26,7 +26,7 @@ export default function registerScreen({ navigation }) {
   };
 
   const createAccount = (userContext) => {
-    if (!verify_passwords()) {
+    if (!verifyPasswords()) {
       return false;
     }
     signUp(username, password1)
