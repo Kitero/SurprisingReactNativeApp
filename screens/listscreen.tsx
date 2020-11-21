@@ -55,11 +55,14 @@ function ListScreenComponent({ navigation, token, setToken }) {
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
 
   React.useEffect(() => {
-    getShoppingList(token)
-      .then((json) => {
-        setDataLists(json);
-      }, () => { });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getShoppingList(token)
+        .then((json) => {
+          setDataLists(json);
+        }, () => { });
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const setPP = () => {
     console.log('set PP');
@@ -72,6 +75,24 @@ function ListScreenComponent({ navigation, token, setToken }) {
   const OpenDisconnectModal = () => {
     setDisconnectModalVisible(true);
   };
+
+  function handleCreateShoppingList(listName, setErrors) {
+    createShoppingList(listName, token)
+      .then((json) => {
+        dataLists.push(json);
+        setDataLists(dataLists.slice());
+      }, (errors) => {
+        setErrors(errors);
+      });
+  }
+
+  function disconnect() {
+    setToken('');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: homeRoute }],
+    });
+  }
 
   const dropdownData = [
     {
@@ -112,24 +133,6 @@ function ListScreenComponent({ navigation, token, setToken }) {
     });
   }, [navigation]);
 
-  function handleCreateShoppingList(listName, setErrors) {
-    createShoppingList(listName, token)
-      .then((json) => {
-        dataLists.push(json);
-        setDataLists(dataLists.slice());
-      }, (errors) => {
-        setErrors(errors);
-      });
-  }
-
-  function disconnect() {
-    setToken('');
-    navigation.reset({
-      index: 0,
-      routes: [{ name: homeRoute }],
-    });
-  }
-
   return (
     <View style={listStyle.listContainer}>
       <FlatList
@@ -159,6 +162,7 @@ ListScreenComponent.propTypes = {
     navigate: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
+    addListener: PropTypes.func.isRequired,
   }).isRequired,
   token: PropTypes.string.isRequired,
 };
@@ -167,7 +171,13 @@ export default function ListScreen(props) {
   return (
     <UserContext.Consumer>
       {
-        (value) => (<ListScreenComponent {...props} {...value} />)
+        (value) => (
+          <ListScreenComponent
+            navigation={props.navigation}
+            token={value.token}
+            setToken={value.setToken}
+          />
+        )
       }
     </UserContext.Consumer>
   );
