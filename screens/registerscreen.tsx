@@ -36,8 +36,8 @@ export default function RegisterScreen({ navigation }) {
           index: 0,
           routes: [{ name: listsRoute }],
         });
-      }, (errors) => {
-        setErrors(errors);
+      }, (errorsStatus) => {
+        setErrors(errorsStatus);
       });
     return true;
   };
@@ -98,5 +98,8 @@ export default function RegisterScreen({ navigation }) {
 RegisterScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    setOptions: PropTypes.func.isRequired,
+    addListener: PropTypes.func.isRequired,
   }).isRequired,
 };

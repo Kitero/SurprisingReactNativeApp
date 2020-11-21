@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    container: {
+  container: {
 
-    },
-    text: {
-        color: 'red'
-    }
+  },
+  text: {
+    color: 'red',
+  },
 });

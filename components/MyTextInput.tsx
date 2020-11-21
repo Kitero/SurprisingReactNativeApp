@@ -8,7 +8,7 @@ import { inputStyle } from '../Style/StyleSheet';
 export default function MyTextInput({
   placeholder, keyboardType, secureTextEntry,
   textContentType, style, onEndEditing,
-  placeholderTextColor, underlineColorAndroid, value, onChangeText, autoFocus
+  placeholderTextColor, underlineColorAndroid, value, onChangeText, autoFocus,
 }) {
   return (
     <>
@@ -58,6 +58,7 @@ MyTextInput.propTypes = {
   underlineColorAndroid: PropTypes.string,
   value: PropTypes.string,
   autoFocus: PropTypes.bool,
+  onChangeText: PropTypes.func,
 };
 
 MyTextInput.defaultProps = {
@@ -71,4 +72,5 @@ MyTextInput.defaultProps = {
   value: '',
   autoFocus: false,
   onEndEditing: () => { },
+  onChangeText: () => { },
 };

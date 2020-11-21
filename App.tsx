@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/homescreen';
-import LoginScreen from './screens/loginscreen';
-import ListScreen from './screens/listscreen';
+import HomeScreen from './screens/homeScreen';
+import LoginScreen from './screens/loginScreen';
+import ListScreen from './screens/listScreen';
 import ListItemsScreen from './screens/listItemsScreen';
-import RegisterScreen from './screens/registerscreen';
+import RegisterScreen from './screens/registerScreen';
 import CameraScreen from './screens/cameraScreen';
 // import useColorScheme from './hooks/useColorScheme';
 import { UserContext } from './contexts/userContext';

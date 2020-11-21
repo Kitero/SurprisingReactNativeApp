@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { dropDownStyle } from '../Style/dropdownStyle';
+import dropDownStyle from '../Style/dropdownStyle';
 import MyButton from './MyButton';
 
 export default function MyDropDown({
-  styleList, styleElements, data, title,
+  styleElements, data, title,
 }) {
   const [isVisible, setIsVisible] = React.useState(false);
 
@@ -29,6 +29,14 @@ export default function MyDropDown({
     </TouchableOpacity>
   );
 
+  renderItemList.propTypes = {
+    item: PropTypes.shape({
+      title: PropTypes.string,
+      callBack: PropTypes.func,
+      id: PropTypes.string,
+    }).isRequired,
+  };
+
   return (
     <>
       <MyButton
@@ -36,8 +44,8 @@ export default function MyDropDown({
         onPress={() => {
           setIsVisible(!isVisible);
         }}
-        styleButton={dropDownStyle.triggerButton}
-        styleText={dropDownStyle.triggerButtonText}
+        styleButton={dropDownStyle.dropDownStyle.triggerButton}
+        styleText={dropDownStyle.dropDownStyle.triggerButtonText}
       />
       <Modal
         animationType="fade"
@@ -50,7 +58,7 @@ export default function MyDropDown({
           }}
           style={{ flex: 1, width: 'auto' }}
         />
-        <View style={dropDownStyle.list}>
+        <View style={dropDownStyle.dropDownStyle.list}>
           <FlatList
             data={data}
             renderItem={renderItemList}
@@ -63,38 +71,26 @@ export default function MyDropDown({
 }
 
 MyDropDown.propTypes = {
-  styleList: PropTypes.shape({
-    position: PropTypes.string,
-    paddingTop: PropTypes.number,
-    paddingBottom: PropTypes.number,
-    paddingLeft: PropTypes.number,
-    paddingRight: PropTypes.number,
-    marginTop: PropTypes.number,
-    marginBottom: PropTypes.number,
-    marginLeft: PropTypes.number,
-    marginRight: PropTypes.number,
-    backgroundColor: PropTypes.string,
-    borderRadius: PropTypes.number,
-    borderColor: PropTypes.string,
-    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  }),
   styleElements: PropTypes.shape({
     color: PropTypes.string,
     textAlign: PropTypes.string,
     fontSize: PropTypes.number,
     backgroundColor: PropTypes.string,
+    paddingTop: PropTypes.number,
+    paddingLeft: PropTypes.number,
+    paddingRight: PropTypes.number,
+    paddingBottom: PropTypes.number,
+    marginTop: PropTypes.number,
+    marginBottom: PropTypes.number,
+    justifyContent: PropTypes.string,
   }),
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     callBack: PropTypes.func,
-  })),
+  })).isRequired,
 };
 
 MyDropDown.defaultProps = {
-  title: 'Menu',
-  styleList: dropDownStyle.list,
-  styleElements: dropDownStyle.element,
-  data: [],
+  styleElements: dropDownStyle.dropDownStyle.element,
 };

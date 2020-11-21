@@ -15,7 +15,7 @@ import YesNoModal from '../modals/yesNoModal';
 import SingleFieldModal from '../modals/singleFieldModal';
 import SelectModal from '../modals/selectModal';
 import { UserContext } from '../contexts/userContext';
-import { dropDownStyle } from '../Style/dropdownStyle';
+import dropDownStyle from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
 import { IListItem, IItem } from '../interfaces/api';
@@ -162,8 +162,7 @@ function ListItemsScreenComponent({
           <MyDropDown
             title="Menu"
             data={dropdownData}
-            styleList={dropDownStyle.list}
-            styleElements={dropDownStyle.element}
+            styleElements={dropDownStyle.dropDownStyle.element}
           />
         </View>
       ),
@@ -191,9 +190,10 @@ function ListItemsScreenComponent({
 
   renderItemList.propTypes = {
     item: PropTypes.shape({
-      id: PropTypes.string,
-      item: PropTypes.string,
+      item: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
     }).isRequired,
+    index: PropTypes.number.isRequired,
   };
 
   return (

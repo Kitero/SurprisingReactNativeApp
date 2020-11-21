@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, TouchableOpacity, Dimensions, Platform, StatusBar, Image,
+  Text,
+  View,
+  Dimensions,
+  Platform,
+  Image,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
@@ -37,16 +41,16 @@ export default function MyCamera() {
       const distances = {};
       const realRatios = {};
       let minDistance = null;
-      for (const ratio of ratios) {
-        const parts = ratio.split(':');
-        const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
-        realRatios[ratio] = realRatio;
+      for (const ratioCam of ratios) {
+        const parts = ratioCam.split(':');
+        const realRatio = parseInt(parts[0], 10) / parseInt(parts[1], 10);
+        realRatios[ratioCam] = realRatio;
         const distance = screenRatio - realRatio;
-        distances[ratio] = realRatio;
+        distances[ratioCam] = realRatio;
         if (minDistance == null) {
-          minDistance = ratio;
+          minDistance = ratioCam;
         } else if (distance >= 0 && distance < distances[minDistance]) {
-          minDistance = ratio;
+          minDistance = ratioCam;
         }
       }
       desiredRatio = minDistance;
@@ -80,8 +84,6 @@ export default function MyCamera() {
   }
 
   const uploadPhoto = () => {
-    // use photo variable containing photo URI, width and height
-    console.log(photo);
     navigation.navigate(listsRoute);
   };
 
@@ -91,7 +93,10 @@ export default function MyCamera() {
       <View style={{ flex: 1 }}>
         <Image
           style={{
-            width: width - width / ratioPhoto, height: height - height / ratioPhoto, marginLeft: width / ratioPhoto / 2, marginTop: height / ratioPhoto / 3,
+            width: width - width / ratioPhoto,
+            height: height - height / ratioPhoto,
+            marginLeft: width / ratioPhoto / 2,
+            marginTop: height / ratioPhoto / 3,
           }}
           source={{
             uri: photo.uri,
@@ -144,7 +149,6 @@ export default function MyCamera() {
             styleText={cameraStyle.TextButtonStyle}
             title="Flip"
             onPress={() => {
-              console.log('flip');
               setType(
                 type === Camera.Constants.Type.back
                   ? Camera.Constants.Type.front
@@ -159,9 +163,9 @@ export default function MyCamera() {
             onPress={async () => {
               if (camera) {
                 setSpinner(!spinner);
-                const photo = await camera.takePictureAsync();
+                const photoInfos = await camera.takePictureAsync();
                 setCameraDisplay(false);
-                setPhoto(photo);
+                setPhoto(photoInfos);
               }
             }}
           />

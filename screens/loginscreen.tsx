@@ -32,8 +32,8 @@ export default function LoginScreen({ navigation }) {
           index: 0,
           routes: [{ name: listsRoute }],
         });
-      }, (errors) => {
-        setErrors(errors);
+      }, (errorsStatus) => {
+        setErrors(errorsStatus);
       });
   }
 
