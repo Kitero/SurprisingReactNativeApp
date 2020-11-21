@@ -6,16 +6,17 @@ import MyErrorPrinter from '../components/MyErrorPrinter';
 import MyTextInput from '../components/MyTextInput';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 
-export default function SingleFieldModal({ visible, setVisible, onValidate }) {
+export default function SingleFieldModal({
+  visible, setVisible, onValidate, placeholder }) {
   const [errors, setErrors] = React.useState([]);
-  const [listName, setListName] = React.useState('');
+  const [fieldValue, setFieldValue] = React.useState('');
   const [buttonDisable, setButtonDisable] = React.useState(true);
 
-  const needDisable = () => listName.length === 0;
+  const needDisable = () => fieldValue.length === 0;
 
   React.useEffect(() => {
     setButtonDisable(needDisable());
-  }, [listName]);
+  }, [fieldValue]);
 
   return (
     <Modal
@@ -39,16 +40,16 @@ export default function SingleFieldModal({ visible, setVisible, onValidate }) {
           <MyErrorPrinter errors={errors} />
           <View style={modalStyle.modalContainerColumn}>
             <MyTextInput
-              placeholder="list name"
-              value={listName}
+              placeholder={placeholder}
+              value={fieldValue}
               onChangeText={(text) => {
-                setListName(text);
+                setFieldValue(text);
               }}
             />
             <MyButton
               title="Create"
               onPress={() => {
-                onValidate(listName, setErrors);
+                onValidate(fieldValue, setErrors);
                 setVisible(false);
               }}
               styleButton={modalStyle.modalButton}
@@ -66,8 +67,10 @@ SingleFieldModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
   onValidate: PropTypes.func,
+  placeholder: PropTypes.string,
 };
 
 SingleFieldModal.defaultProps = {
   onValidate: (listName, setErrors) => { },
+  placeholder: '',
 };

@@ -188,6 +188,7 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
         visible={createItemModalVisible}
         setVisible={setCreateItemModalVisible}
         onValidate={handleCreateNewItem}
+        placeholder="New item"
       />
     </View>
   );

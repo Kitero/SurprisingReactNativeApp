@@ -148,6 +148,7 @@ function ListScreenComponent({ navigation, token, setToken }) {
         visible={newItemModalVisible}
         setVisible={setNewItemModalVisible}
         onValidate={handleCreateShoppingList}
+        placeholder="New list"
       />
     </View>
   );
