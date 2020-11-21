@@ -5,7 +5,15 @@ import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { registerRoute, loginRoute } from '../routes';
 
-export default function HomeScreen({ navigation }) {
+interface INavigate {
+  navigate: Function;
+}
+
+interface IProps {
+  navigation: INavigate;
+}
+
+export default function HomeScreen({ navigation }: IProps) {
   return (
     <>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
