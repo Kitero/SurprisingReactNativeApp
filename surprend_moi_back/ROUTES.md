@@ -19,6 +19,8 @@ Create new account.
     "profile_picture": "http://picture.url"
 }
 ```
+
+
 ## POST sign-in/
 Connect user return user information.
 ### Required fields
@@ -37,6 +39,9 @@ Connect user return user information.
     "profile_picture": "http://picture.url"
 }
 ```
+
+################################################################
+# What is it for?
 ## POST create-item/
 Create new item.
 ### Required header
@@ -54,6 +59,8 @@ Create new item.
     "name": "Carotte"
 }
 ```
+
+
 ## GET get-items/
 Get list of items.
 ### Required header
@@ -67,6 +74,8 @@ Get list of items.
     }, ...
 ]
 ```
+
+
 ## POST create-shopping-list/
 Create new shopping list.
 ### Required header
@@ -84,6 +93,8 @@ Create new shopping list.
     "name": "My shopping list"
 }
 ```
+
+
 ## GET get-shopping-lists/
 Get list of shopping list (created by user).
 ### Required header
@@ -97,6 +108,8 @@ Get list of shopping list (created by user).
     }, ...
 ]
 ```
+
+
 ## POST put-item-in-shopping-list/
 Put item into shopping list.
 ### Required header
@@ -116,6 +129,8 @@ Put item into shopping list.
     "item": 1  
 }
 ```
+
+
 ## GET get-items-from-shopping-list/\<int:shopping_list_id>/
 Get items from shopping list.
 ### Required header
@@ -131,6 +146,8 @@ Get items from shopping list.
     }, ...
 ]
 ```
+
+
 ## GET check-shopping-list-item/\<int:shopping_list_item_id>/
 Toggle shopping list item checked attribute.
 ### Required header

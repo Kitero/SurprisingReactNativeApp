@@ -18,6 +18,9 @@ import SingleFieldModal from '../modals/singleFieldModal';
 import SelectModal from '../modals/selectModal';
 import { homeRoute } from '../routes';
 import { UserContext } from '../contexts/userContext';
+import { dropDownStyle } from '../Style/dropdownStyle';
+import MyDropDown from '../components/MyDropDown';
+import { cameraRoute, homeRoute } from '../routes';
 
 function ListItemsScreenComponent({ route, navigation, token, setToken }) {
   const [data, setData] = React.useState([]);
@@ -84,6 +87,41 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
     setCreateItemModalVisible(true);
   };
 
+  const setPP = () => {
+    console.log('set PP');
+    navigation.navigate(cameraRoute);
+  };
+
+  const dropdownData = [
+    {
+      title: 'Create new item',
+      callBack: () => {
+        setNewItemModalVisible(true);
+      },
+      id: '1',
+    },
+    {
+      title: 'Set profil picture',
+      callBack: setPP,
+      id: '2',
+    },
+    {
+      title: 'Delete this list',
+      callBack: () => {
+        setDeleteModalVisible(true);
+      },
+      id: '3',
+    },
+    {
+      title: 'Disconnect',
+      callBack: () => {
+        setDisconnectModalVisible(true);
+      },
+      id: '4',
+    },
+  ];
+
+  // Set Menu button in the top bar
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -94,13 +132,11 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
             flexDirection: 'row',
           }}
         >
-          <MyButton
-            title="Disconnect"
-            onPress={() => {
-              setDisconnectModalVisible(true);
-            }}
-            styleButton={ButtonStyle.buttonDisconnect}
-            styleText={ButtonStyle.text}
+          <MyDropDown
+            title="Menu"
+            data={dropdownData}
+            styleList={dropDownStyle.list}
+            styleElements={dropDownStyle.element}
           />
         </View>
       ),
@@ -131,25 +167,7 @@ function ListItemsScreenComponent({ route, navigation, token, setToken }) {
       <FlatList
         data={data}
         renderItem={renderItemList}
-        keyExtractor={(item) => String(item.id)}
-        ListHeaderComponent={(
-          <>
-            <MyButton
-              title="Delete list"
-              onPress={() => {
-                setDeleteModalVisible(true);
-              }}
-              styleButton={ButtonStyle.buttonDelete}
-              styleText={ButtonStyle.text}
-            />
-            <MyButton
-              title="Add item"
-              onPress={() => { setNewItemModalVisible(!newItemModalVisible); }}
-              styleButton={ButtonStyle.buttonNewItem}
-              styleText={ButtonStyle.text}
-            />
-          </>
-        )}
+        keyExtractor={(item) => item.id}
         ListFooterComponent={
           <View style={{ height: 280 }} />
         }

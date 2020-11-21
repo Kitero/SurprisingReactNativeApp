@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
 import { listStyle } from '../Style/listStyle';
-import { homeRoute, listItemsRoute } from '../routes';
+import { homeRoute, listItemsRoute, cameraRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import { createShoppingList, getShoppingList } from '../apiCaller';

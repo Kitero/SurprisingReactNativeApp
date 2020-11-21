@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import homeScreen from './screens/homescreen';
-import LoginScreen from './screens/loginscreen';
-import ListScreen from './screens/listscreen';
+import HomeScreen from './screens/homeScreen';
+import LoginScreen from './screens/loginScreen';
+import ListScreen from './screens/listScreen';
 import ListItemsScreen from './screens/listItemsScreen';
-import RegisterScreen from './screens/registerscreen';
+import RegisterScreen from './screens/registerScreen';
+import CameraScreen from './screens/cameraScreen';
 import useColorScheme from './hooks/useColorScheme';
 import { UserContext } from './contexts/userContext';
 import * as routes from './routes';
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name={routes.loginRoute} component={LoginScreen} />
           <Stack.Screen name={routes.listsRoute} component={ListScreen} />
           <Stack.Screen name={routes.listItemsRoute} component={ListItemsScreen} />
+          <Stack.Screen name={routes.cameraRoute} component={CameraScreen} />
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer>

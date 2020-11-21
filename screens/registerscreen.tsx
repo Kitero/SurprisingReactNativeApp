@@ -95,7 +95,7 @@ export default function registerScreen({ navigation }) {
   );
 }
 
-registerScreen.propTypes = {
+RegisterScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,

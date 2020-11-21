@@ -82,7 +82,7 @@ export default function loginScreen({ navigation }) {
   );
 }
 
-loginScreen.propTypes = {
+LoginScreen.propTypes = {
   navigation: PropTypes.shape({
     reset: PropTypes.func.isRequired,
   }).isRequired,

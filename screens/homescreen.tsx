@@ -5,7 +5,7 @@ import MyButton from '../components/MyButton';
 import { ButtonStyle } from '../Style/StyleSheet';
 import { registerRoute, loginRoute } from '../routes';
 
-export default function homeScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
   return (
     <>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -48,7 +48,7 @@ export default function homeScreen({ navigation }) {
   );
 }
 
-homeScreen.propTypes = {
+HomeScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
