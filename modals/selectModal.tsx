@@ -33,7 +33,7 @@ export default function SelectModal({
     }
   };
 
-  React.useEffect(() => {
+  const handleSetElems = () => {
     getElems()
       .then((elem: Array<Object>) => {
         setItems(elem);
@@ -41,7 +41,13 @@ export default function SelectModal({
           setSelectedItem(elem[0][elemValueFieldName]);
         }
       });
-  }, []);
+  };
+
+  React.useEffect(() => {
+    if (visible) {
+      handleSetElems();
+    }
+  }, [visible]);
 
   return (
     <Modal

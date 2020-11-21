@@ -19,7 +19,9 @@ import { dropDownStyle } from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
 
-function ListItemsScreenComponent({ route, navigation, token, setToken }) {
+function ListItemsScreenComponent({
+  route, navigation, token, setToken,
+}) {
   const [data, setData] = React.useState([]);
   const [items, setItems] = React.useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
