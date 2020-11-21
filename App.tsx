@@ -6,6 +6,7 @@ import loginScreen from './screens/loginScreen';
 import listScreen from './screens/listScreen';
 import listItemsScreen from './screens/listItemsScreen';
 import registerScreen from './screens/registerScreen';
+import cameraScreen from './screens/cameraScreen';
 import useColorScheme from './hooks/useColorScheme';
 import * as routes from './routes';
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name={routes.listsRoute} component={listScreen} />
         <Stack.Screen name={routes.listItemsRoute} component={listItemsScreen} />
         <Stack.Screen name={routes.registerRoute} component={registerScreen} />
+        <Stack.Screen name={routes.cameraRoute} component={cameraScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

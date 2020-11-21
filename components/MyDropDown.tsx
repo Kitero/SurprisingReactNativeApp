@@ -9,7 +9,6 @@ import {
 import PropTypes from 'prop-types';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyButton from './MyButton';
-import { modalStyle } from '../Style/StyleSheet';
 
 export default function MyDropDown({
   styleList, styleElements, data, title,

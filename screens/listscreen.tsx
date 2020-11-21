@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
 import { ButtonStyle, modalStyle, textStyle } from '../Style/StyleSheet';
 import { listStyle } from '../Style/listStyle';
-import { homeRoute, listItemsRoute } from '../routes';
+import { homeRoute, listItemsRoute, cameraRoute } from '../routes';
 import MyDropDown from '../components/MyDropDown';
 import { dropDownStyle } from '../Style/dropdownStyle';
 import MyTextInput from '../components/MyTextInput';
@@ -102,6 +102,7 @@ export default function listScreen({ navigation }) {
 
   const setPP = () => {
     console.log('set PP');
+    navigation.navigate(cameraRoute);
   }
 
   const createNewList = () => {

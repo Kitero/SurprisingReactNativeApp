@@ -34,8 +34,7 @@ export default function homeScreen({ navigation }) {
         <View style={{
           marginRight: 50,
           marginLeft: 50,
-        }}
-        >
+        }}>
           <MyButton
             title="Login"
             onPress={() => navigation.navigate(loginRoute)}

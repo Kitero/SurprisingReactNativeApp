@@ -127,6 +127,10 @@ export default function listItemsScreen({ route, navigation }) {
               setData(data.slice());
               saveNewData();
             }}
+            onEndEditing={ () => {
+              
+            }
+            }
           />
         </View>
         <View style={{ flexGrow: 2 }}>
