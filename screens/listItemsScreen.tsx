@@ -19,10 +19,28 @@ import { dropDownStyle } from '../Style/dropdownStyle';
 import MyDropDown from '../components/MyDropDown';
 import { cameraRoute, homeRoute } from '../routes';
 
+interface IRoute {
+  params: {
+    listId: string;
+  }
+}
+
+interface IProps {
+  route: IRoute;
+  navigation: object;
+  token: string;
+  setToken: Function;
+}
+
+interface IData {
+  checked: boolean;
+  name: string;
+}
+
 function ListItemsScreenComponent({
   route, navigation, token, setToken,
-}) {
-  const [data, setData] = React.useState([]);
+}: IProps) {
+  const [data, setData] = React.useState<Array<IData>>([]);
   const [items, setItems] = React.useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
@@ -31,12 +49,12 @@ function ListItemsScreenComponent({
   const { listId } = route.params;
 
   const compareItems = (
-    item1: { checked: boolean; name: string; }, item2: { checked: boolean; name: string; },
+    item1: { checked: boolean; name: string }, item2: IData,
   ) => ((
     (item1.checked && (!item2.checked || item1.name > item2.name))
     || (!item1.checked && !item2.checked && item1.name > item2.name)) ? 1 : -1);
 
-  const sortData = (arr = data) => arr.sort(compareItems);
+  const sortData = (arr: Array<IData> = data) => arr.sort(compareItems);
 
   React.useEffect(() => {
     getShoppingListItems(listId, token)
