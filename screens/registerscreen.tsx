@@ -10,7 +10,6 @@ import { listsRoute } from '../routes';
 import { signUp } from '../apiCaller';
 import { UserContext } from '../contexts/userContext';
 
-
 export default function registerScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
@@ -24,7 +23,7 @@ export default function registerScreen({ navigation }) {
       return false;
     }
     return true;
-  }
+  };
 
   const createAccount = (userContext) => {
     if (!verify_passwords()) {
@@ -35,16 +34,17 @@ export default function registerScreen({ navigation }) {
         userContext.setToken(json.token);
         navigation.reset({
           index: 0,
-          routes: [{ name: listsRoute }]
+          routes: [{ name: listsRoute }],
         });
       }, (errors) => {
         setErrors(errors);
       });
-  }
+    return true;
+  };
 
-  const needDisable = () => {
-    return username.length == 0 || password1.length == 0 || password2.length == 0;
-  }
+  const needDisable = () => username.length === 0
+    || password1.length === 0
+    || password2.length === 0;
 
   React.useEffect(() => {
     setButtonDisable(needDisable());
@@ -59,6 +59,7 @@ export default function registerScreen({ navigation }) {
         textContentType="username"
         value={username}
         onChangeText={(text) => { setUsername(text); }}
+        autoFocus
       />
       <MyTextInput
         placeholder="Password"

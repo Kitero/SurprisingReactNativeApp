@@ -45,6 +45,7 @@ export default function SingleFieldModal({
               onChangeText={(text) => {
                 setFieldValue(text);
               }}
+              autoFocus
             />
             <MyButton
               title="Create"

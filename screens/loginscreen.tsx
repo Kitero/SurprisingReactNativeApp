@@ -10,7 +10,6 @@ import { signIn } from '../apiCaller';
 import MyErrorPrinter from '../components/MyErrorPrinter';
 import { UserContext } from '../contexts/userContext';
 
-
 export default function loginScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -31,16 +30,14 @@ export default function loginScreen({ navigation }) {
         uesrContext.setToken(json.token);
         navigation.reset({
           index: 0,
-          routes: [{ name: listsRoute }]
+          routes: [{ name: listsRoute }],
         });
       }, (errors) => {
         setErrors(errors);
       });
   }
 
-  const needDisable = () => {
-    return username.length == 0 || password.length == 0;
-  }
+  const needDisable = () => username.length === 0 || password.length === 0;
 
   React.useEffect(() => {
     setButtonDisable(needDisable());
@@ -54,6 +51,7 @@ export default function loginScreen({ navigation }) {
         placeholder="Username"
         value={username}
         onChangeText={handleUsernameChange}
+        autoFocus
       />
       <MyTextInput
         placeholder="Password"
