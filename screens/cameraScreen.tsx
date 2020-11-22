@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 import PropTypes from 'prop-types';
 import CameraStyle from '../Style/cameraStyle';
 import MyCamera from '../components/MyCamera';
@@ -19,7 +18,6 @@ interface IComponentProps extends IProps {
 
 function CameraScreenComponent({ navigation, token, setProfileImageUrl }: IComponentProps) {
   const handleUploadProfilePicture = (picture) => {
-    console.log(token);
     uploadProfilePicture(picture.base64, token)
       .then((json) => {
         setProfileImageUrl(json.profile_picture);

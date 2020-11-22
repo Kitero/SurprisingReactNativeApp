@@ -39,7 +39,7 @@ interface IItemProps {
 }
 
 function ListItemsScreenComponent({
-  route, navigation, token, setToken, profileImageUrl
+  route, navigation, token, setToken, profileImageUrl,
 }: IProps) {
   const [data, setData] = React.useState<IListItem[]>([]);
   const [items, setItems] = React.useState<IItem[]>([]);
