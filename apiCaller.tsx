@@ -3,8 +3,8 @@ import {
   IListItem, IItem, IList, IUser,
 } from './interfaces/api';
 
-const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
-// const apiUrl = 'http://192.168.1.23:5555/';
+// const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
+const apiUrl = 'http://192.168.1.23:5555/';
 
 interface IRequestOptions {
   method: string;

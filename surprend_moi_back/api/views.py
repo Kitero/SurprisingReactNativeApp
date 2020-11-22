@@ -112,5 +112,7 @@ def upload_profile_picture(request):
     serializer = serializers.UserSerializer(request.user, data=data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    print(serializer.data)
-    return Response(serializer.data)
+    data = serializer.data
+    data['profile_picture'] = f'{request.scheme}://{request.META["HTTP_HOST"]}{data["profile_picture"]}'
+    print(data)
+    return Response(data)

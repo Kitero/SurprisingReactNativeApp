@@ -26,27 +26,27 @@ SECRET_KEY = 'z5b(bm8^jjl1i-c09l2$-5wgie$y021f&oe!7i6k0x*embdxn0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.23']
+ALLOWED_HOSTS = ['192.168.1.23', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
+    'rest_framework',
     'api',
-    'rest_framework'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corsheaders.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'surprend_moi.wsgi.application'
+# WSGI_APPLICATION = 'surprend_moi.wsgi.application'
 
 
 # Database
@@ -125,7 +125,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/pictures/'
 UPLOADED_FILES_USE_URL = True
-STATIC_BASE_DIR_PATH = '/pictures'
+STATIC_BASE_DIR_PATH = '/static'
 UPLOAD_FILE_BASE_DIR_PATH = '/pictures'
 
 MEDIA_ROOT = 'pictures'
