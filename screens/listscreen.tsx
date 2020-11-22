@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  View, FlatList,
+  View, FlatList, Image,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import MyButton from '../components/MyButton';
@@ -69,6 +69,8 @@ function ListScreenComponent({ navigation, token, setToken }: IProps) {
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
 
+  const [ProfilPicture, setProfilePicture] = React.useState({ uri: 'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg' });
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getShoppingList(token)
@@ -130,18 +132,33 @@ function ListScreenComponent({ navigation, token, setToken }: IProps) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View
-          style={{
-            flex: 1,
-            alignContent: 'flex-end',
-            flexDirection: 'row',
-          }}
-        >
-          <MyDropDown
-            title="Menu"
-            data={dropdownData}
-            styleElements={dropDownStyle.dropDownStyle.element}
-          />
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <Image
+              style={{
+                width: 30,
+                height: 30,
+              }}
+              source={{
+                uri: ProfilPicture.uri,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              alignSelf: 'flex-end',
+            }}
+          >
+            <MyDropDown
+              title="Menu"
+              data={dropdownData}
+              styleElements={dropDownStyle.dropDownStyle.element}
+            />
+          </View>
         </View>
       ),
     });
