@@ -6,16 +6,17 @@ import {
   Platform,
   Image,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import { Camera } from 'expo-camera';
-import { useNavigation } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MyButton from './MyButton';
 import cameraStyle from '../Style/cameraStyle';
-import { listsRoute } from '../routes';
 
-export default function MyCamera() {
-  const navigation = useNavigation();
+interface IProps {
+  onValidatePicture: Function;
+}
 
+export default function MyCamera({ onValidatePicture }: IProps) {
   const [spinner, setSpinner] = useState(false);
 
   const [hasPermission, setHasPermission] = useState<boolean>();
@@ -84,7 +85,7 @@ export default function MyCamera() {
   }
 
   const uploadPhoto = () => {
-    navigation.navigate(listsRoute);
+    onValidatePicture(photo);
   };
 
   if (!cameraDisplay) {
@@ -163,7 +164,9 @@ export default function MyCamera() {
             onPress={async () => {
               if (camera) {
                 setSpinner(!spinner);
-                const photoInfos = await camera.takePictureAsync();
+                const photoInfos = await camera.takePictureAsync({
+                  base64: true,
+                });
                 setCameraDisplay(false);
                 setPhoto(photoInfos);
               }
@@ -174,3 +177,7 @@ export default function MyCamera() {
     </View>
   );
 }
+
+MyCamera.propTypes = {
+  onValidatePicture: PropTypes.func.isRequired,
+};

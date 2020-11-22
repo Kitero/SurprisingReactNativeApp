@@ -33,6 +33,7 @@ export default function LoginScreen({ navigation }: IProps) {
     signIn(username, password)
       .then((json) => {
         userContext.setToken(json.token);
+        userContext.setProfileImageUrl(json.profile_picture);
         navigation.reset({
           index: 0,
           routes: [{ name: listsRoute }],

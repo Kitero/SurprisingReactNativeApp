@@ -2,8 +2,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from PIL import Image
+from io import BytesIO
+import base64
 import api.serializers as serializers
 import api.models as models
+from django.core.files.base import ContentFile
 
 
 @api_view(['POST'])
@@ -97,3 +101,16 @@ def delete_shopping_list(request, shopping_list_id):
     query = models.ShoppingList.objects.get(pk=shopping_list_id)
     query.delete()
     return Response({})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_profile_picture(request):
+    decoded_image = base64.b64decode(request.data)
+    img_content = ContentFile(decoded_image, f'{request.user.username}.jpg')
+    data = {'profile_picture': img_content}
+    serializer = serializers.UserSerializer(request.user, data=data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    print(serializer.data)
+    return Response(serializer.data)

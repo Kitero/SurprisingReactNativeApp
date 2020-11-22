@@ -9,7 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'password', 'token', 'profile_picture')
         extra_kwargs = {
             'token': {'default': tools.get_new_token},
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'profile_picture': {'use_url': True}
         }
 
     def create(self, validated_data):

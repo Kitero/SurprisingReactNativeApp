@@ -4,6 +4,7 @@ import {
 } from './interfaces/api';
 
 const apiUrl = 'http://x2021oxygene667208093000.francecentral.cloudapp.azure.com:5555/';
+// const apiUrl = 'http://192.168.1.23:5555/';
 
 interface IRequestOptions {
   method: string;
@@ -15,8 +16,8 @@ function fetchApi<T>(path: string, method: string, headers = {}, data = {}) {
   const requestOption: IRequestOptions = {
     method,
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: '*/*',
+      'Content-Type': 'application/json;multipart/form-data;',
       ...headers,
     },
   };
@@ -91,6 +92,10 @@ function deleteShoppingList(shoppingListId: string, token: string) {
   return fetchApi(`delete-shopping-list/${shoppingListId}/`, 'GET', { token });
 }
 
+function uploadProfilePicture(picture: string, token: string) {
+  return fetchApi('upload-profile-picture/', 'POST', { token }, picture);
+}
+
 export {
   signUp,
   signIn,
@@ -102,4 +107,5 @@ export {
   getShoppingListItems,
   checkShippingListItem,
   deleteShoppingList,
+  uploadProfilePicture,
 };

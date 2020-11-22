@@ -14,3 +14,6 @@ web-build/
 __pycache__
 .idea/
 db.*
+
+surprend_moi_back/pictures/*.jpg
+!surprend_moi_back/pictures/empty

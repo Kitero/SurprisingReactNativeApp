@@ -30,6 +30,7 @@ interface IScreenProps {
 interface IProps extends IScreenProps {
   token: string;
   setToken: Function;
+  profileImageUrl: string;
 }
 
 interface IItemProps {
@@ -38,7 +39,7 @@ interface IItemProps {
 }
 
 function ListItemsScreenComponent({
-  route, navigation, token, setToken,
+  route, navigation, token, setToken, profileImageUrl
 }: IProps) {
   const [data, setData] = React.useState<IListItem[]>([]);
   const [items, setItems] = React.useState<IItem[]>([]);
@@ -46,7 +47,6 @@ function ListItemsScreenComponent({
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
   const [createItemModalVisible, setCreateItemModalVisible] = React.useState(false);
-  const [ProfilPicture, setProfilePicture] = React.useState({ uri: 'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg' });
   const { listId } = route.params;
 
   const compareItems = (
@@ -154,7 +154,7 @@ function ListItemsScreenComponent({
                 height: 30,
               }}
               source={{
-                uri: ProfilPicture.uri,
+                uri: profileImageUrl,
               }}
             />
           </View>
@@ -264,12 +264,13 @@ export default function ListItemsScreen({ navigation, route }: IScreenProps) {
   return (
     <UserContext.Consumer>
       {
-        ({ token, setToken }) => (
+        ({ token, setToken, profileImageUrl }) => (
           <ListItemsScreenComponent
             navigation={navigation}
             route={route}
             token={token}
             setToken={setToken}
+            profileImageUrl={profileImageUrl}
           />
         )
       }

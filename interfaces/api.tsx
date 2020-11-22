@@ -17,6 +17,7 @@ interface IList {
 
 interface IUser {
   token: string;
+  profile_picture: string;
 }
 
 export {

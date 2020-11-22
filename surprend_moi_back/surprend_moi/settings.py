@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'z5b(bm8^jjl1i-c09l2$-5wgie$y021f&oe!7i6k0x*embdxn0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.23']
 
 
 # Application definition
@@ -122,6 +123,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/pictures/'
+UPLOADED_FILES_USE_URL = True
+STATIC_BASE_DIR_PATH = '/pictures'
+UPLOAD_FILE_BASE_DIR_PATH = '/pictures'
+
+MEDIA_ROOT = 'pictures'
 
 
 # Rest framework

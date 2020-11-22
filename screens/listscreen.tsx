@@ -62,14 +62,15 @@ interface IScreenProps {
 interface IProps extends IScreenProps {
   token: string;
   setToken: Function;
+  profileImageUrl: string;
 }
 
-function ListScreenComponent({ navigation, token, setToken }: IProps) {
+function ListScreenComponent({
+  navigation, token, setToken, profileImageUrl,
+}: IProps) {
   const [dataLists, setDataLists] = React.useState<IList[]>([]);
   const [disconnectModalVisible, setDisconnectModalVisible] = React.useState(false);
   const [newItemModalVisible, setNewItemModalVisible] = React.useState(false);
-
-  const [ProfilPicture, setProfilePicture] = React.useState({ uri: 'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg' });
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -144,7 +145,7 @@ function ListScreenComponent({ navigation, token, setToken }: IProps) {
                 height: 30,
               }}
               source={{
-                uri: ProfilPicture.uri,
+                uri: profileImageUrl,
               }}
             />
           </View>
@@ -208,6 +209,7 @@ export default function ListScreen({ navigation }: IScreenProps) {
             navigation={navigation}
             token={value.token}
             setToken={value.setToken}
+            profileImageUrl={value.profileImageUrl}
           />
         )
       }

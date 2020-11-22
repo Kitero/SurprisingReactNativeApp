@@ -5,7 +5,8 @@ class User(models.Model):
     username = models.CharField(max_length=256, unique=True)
     password = models.CharField(max_length=256)
     token = models.CharField(max_length=256, editable=False)
-    profile_picture = models.ImageField(null=True)
+    # profile_picture = models.ImageField(null=True)
+    profile_picture = models.FileField(null=True)
 
 
 class ShoppingItem(models.Model):

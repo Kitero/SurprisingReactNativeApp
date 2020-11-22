@@ -37,6 +37,7 @@ export default function RegisterScreen({ navigation }: IProps) {
     signUp(username, password1)
       .then((json) => {
         userContext.setToken(json.token);
+        userContext.setProfileImageUrl(json.profile_picture);
         navigation.reset({
           index: 0,
           routes: [{ name: listsRoute }],
